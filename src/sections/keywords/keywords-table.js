@@ -66,7 +66,7 @@ function EnhancedTableToolbar(props) {
   );
 }
 
-export const CustomersTable = (props) => {
+export const KeywordsTable = (props) => {
   const {
     items = [],
     onDeselectAll,
@@ -159,7 +159,7 @@ export const CustomersTable = (props) => {
   );
 };
 
-CustomersTable.propTypes = {
+KeywordsTable.propTypes = {
   count: PropTypes.number,
   items: PropTypes.array,
   onDeselectAll: PropTypes.func,

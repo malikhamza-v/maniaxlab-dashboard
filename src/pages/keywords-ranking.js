@@ -12,8 +12,8 @@ import {
 } from "@mui/material";
 import { useSelection } from "src/hooks/use-selection";
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
-import { CustomersTable } from "src/sections/customer/customers-table";
-import { CustomersSearch } from "src/sections/customer/customers-search";
+import { KeywordsTable } from "src/sections/keywords/keywords-table";
+import { KeywordsSearch } from "src/sections/keywords/keywords-search";
 import { applyPagination } from "src/utils/apply-pagination";
 import SEO from "@/components/seo";
 import { GetProjectKeywords } from "@/utils/axios/axios";
@@ -27,6 +27,7 @@ const useCustomerIds = (customers) => {
 const Page = () => {
   const [keywords, setKeywords] = useState([]);
   const [potentialKeywords, setPotentialKeywords] = useState([]);
+  const [compareOption, setCompareOption] = useState([]);
 
   useEffect(() => {
     const fetchProjectKeywords = async () => {
@@ -36,8 +37,40 @@ const Page = () => {
       if (!data) {
         return;
       }
-      setKeywords(data.keywords);
-      setPotentialKeywords(data.potential_keywords);
+      const groupedKeywords = data.keywords.reduce((acc, keyword) => {
+        const afterWhatDays = keyword.after_what_days;
+        if (!acc[afterWhatDays]) {
+          acc[afterWhatDays] = [];
+        }
+        acc[afterWhatDays].push(keyword);
+        return acc;
+      }, {});
+
+      const groupedPotentialKeywords = data.potential_keywords.reduce(
+        (acc, keyword) => {
+          const afterWhatDays = keyword.after_what_days;
+          if (!acc[afterWhatDays]) {
+            acc[afterWhatDays] = [];
+          }
+          acc[afterWhatDays].push(keyword);
+          return acc;
+        },
+        {}
+      );
+
+      const objectKeys = [
+        ...new Set([
+          ...Object.keys(groupedKeywords),
+          ...Object.keys(groupedPotentialKeywords),
+        ]),
+      ];
+
+      setCompareOption(objectKeys);
+
+      console.log("==", groupedKeywords, "==", groupedPotentialKeywords);
+
+      setKeywords(groupedKeywords["0"]);
+      setPotentialKeywords(groupedPotentialKeywords["0"]);
     };
 
     fetchProjectKeywords();
@@ -98,8 +131,8 @@ const Page = () => {
                 </Button>
               </div>
             </Stack>
-            <CustomersSearch />
-            <CustomersTable
+            <KeywordsSearch compareOption={compareOption} />
+            <KeywordsTable
               items={keywords}
               onDeselectAll={keywordsSelection.handleDeselectAll}
               onDeselectOne={keywordsSelection.handleDeselectOne}
@@ -108,7 +141,7 @@ const Page = () => {
               selected={keywordsSelection.selected}
               potentialKeywords
             />
-            <CustomersTable
+            <KeywordsTable
               items={potentialKeywords}
               onDeselectAll={potentialKeywordsSelection.handleDeselectAll}
               onDeselectOne={potentialKeywordsSelection.handleDeselectOne}
