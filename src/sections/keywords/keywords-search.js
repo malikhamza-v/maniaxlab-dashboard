@@ -47,7 +47,11 @@ const FilterIcon = () => (
   </svg>
 );
 
-export const KeywordsSearch = ({ compareOption }) => {
+export const KeywordsSearch = ({
+  compareOption,
+  handleShowLatest,
+  handleCompare,
+}) => {
   const [selectedFilter, setSelectedFilter] = useState(0);
   const theme = useTheme();
   const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"));
@@ -92,7 +96,7 @@ export const KeywordsSearch = ({ compareOption }) => {
             }
             return (
               <MenuItem key={index} value={item}>
-                After {item}-Days
+                Before {item}-Days
               </MenuItem>
             );
           })}
@@ -108,6 +112,7 @@ export const KeywordsSearch = ({ compareOption }) => {
       >
         <div>
           <Button
+            onClick={() => handleCompare(selectedFilter)}
             sx={{ marginRight: "10px" }}
             startIcon={
               <SvgIcon fontSize="small">
@@ -121,7 +126,10 @@ export const KeywordsSearch = ({ compareOption }) => {
         </div>
         <div>
           <Button
-            onClick={handleClearFilter}
+            onClick={() => {
+              handleShowLatest();
+              setSelectedFilter(0);
+            }}
             startIcon={
               <SvgIcon fontSize="small">
                 <TipsAndUpdatesOutlinedIcon />

@@ -75,6 +75,7 @@ export const KeywordsTable = (props) => {
     onSelectOne,
     selected = [],
     potentialKeywords,
+    comparekeywords,
   } = props;
 
   const selectedSome = selected.length > 0 && selected.length < items.length;
@@ -114,6 +115,10 @@ export const KeywordsTable = (props) => {
               </TableHead>
               <TableBody>
                 {items.map((customer) => {
+                  const value = comparekeywords?.filter((item) => {
+                    return item.keyword === customer.keyword;
+                  });
+
                   const isSelected = selected.includes(customer.id);
 
                   return (
@@ -136,16 +141,24 @@ export const KeywordsTable = (props) => {
                         </Typography>
                       </TableCell>
                       <TableCell align="center">
-                        {customer.position_google}
+                        {value[0]?.position_google
+                          ? ` ${value[0]?.position_google} -> ${customer.position_google}`
+                          : customer.position_google}
                       </TableCell>
                       <TableCell align="center">
-                        {customer.position_bing}
+                        {value[0]?.position_bing
+                          ? `${value[0]?.position_bing} -> ${customer.position_bing} `
+                          : customer.position_bing}
                       </TableCell>
                       <TableCell align="center">
-                        {customer.keyword_difficulty}
+                        {value[0]?.keyword_difficulty
+                          ? `${value[0]?.keyword_difficulty} -> ${customer.keyword_difficulty}`
+                          : customer.keyword_difficulty}
                       </TableCell>
                       <TableCell align="center">
-                        {customer.potential_traffic}
+                        {value[0]?.keyword_difficulty
+                          ? `${value[0]?.potential_traffic} -> ${customer.potential_traffic} `
+                          : customer.potential_traffic}
                       </TableCell>
                     </TableRow>
                   );

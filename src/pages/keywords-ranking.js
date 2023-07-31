@@ -14,20 +14,24 @@ import { useSelection } from "src/hooks/use-selection";
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
 import { KeywordsTable } from "src/sections/keywords/keywords-table";
 import { KeywordsSearch } from "src/sections/keywords/keywords-search";
-import { applyPagination } from "src/utils/apply-pagination";
 import SEO from "@/components/seo";
 import { GetProjectKeywords } from "@/utils/axios/axios";
 
 const useCustomerIds = (customers) => {
   return useMemo(() => {
-    return customers.map((customer) => customer.id);
+    return customers?.map((customer) => customer.id);
   }, [customers]);
 };
 
 const Page = () => {
   const [keywords, setKeywords] = useState([]);
   const [potentialKeywords, setPotentialKeywords] = useState([]);
+  const [groupedKeywords, setGroupedKeywords] = useState({});
+  const [groupedPotentialKeywords, setGroupedPotentialKeywords] = useState({});
   const [compareOption, setCompareOption] = useState([]);
+  const [isCompare, setIsCompare] = useState(false);
+  const [comparekeywords, setComparekeywords] = useState([]);
+  const [comparePotentialKeywords, setComparePotentialKeywords] = useState([]);
 
   useEffect(() => {
     const fetchProjectKeywords = async () => {
@@ -66,20 +70,42 @@ const Page = () => {
       ];
 
       setCompareOption(objectKeys);
-
-      console.log("==", groupedKeywords, "==", groupedPotentialKeywords);
-
-      setKeywords(groupedKeywords["0"]);
-      setPotentialKeywords(groupedPotentialKeywords["0"]);
+      setGroupedKeywords(groupedKeywords);
+      setGroupedPotentialKeywords(groupedPotentialKeywords);
     };
 
     fetchProjectKeywords();
   }, []);
 
+  useEffect(() => {
+    const numArray = compareOption.map(Number);
+    const maxNum = Math.max(...numArray);
+    setKeywords(groupedKeywords[maxNum]);
+    setPotentialKeywords(groupedPotentialKeywords[maxNum]);
+  }, [compareOption]);
+
   const keywordIds = useCustomerIds(keywords);
   const keywordsSelection = useSelection(keywordIds);
   const potentialKeywordIds = useCustomerIds(keywords);
   const potentialKeywordsSelection = useSelection(potentialKeywordIds);
+
+  const handleShowLatest = () => {
+    const numArray = compareOption.map(Number);
+    const maxNum = Math.max(...numArray);
+    setKeywords(groupedKeywords[maxNum]);
+    setPotentialKeywords(groupedPotentialKeywords[maxNum]);
+    setComparekeywords([]);
+    setComparePotentialKeywords([]);
+  };
+
+  const handleCompare = (value) => {
+    const numArray = compareOption.map(Number);
+    const maxNum = Math.max(...numArray);
+    setIsCompare(true);
+    setComparekeywords(groupedKeywords[maxNum - value]);
+    setComparePotentialKeywords(groupedPotentialKeywords[maxNum - value]);
+  };
+
   return (
     <>
       <SEO pageTitle="Keywords Ranking" />
@@ -131,7 +157,11 @@ const Page = () => {
                 </Button>
               </div>
             </Stack>
-            <KeywordsSearch compareOption={compareOption} />
+            <KeywordsSearch
+              compareOption={compareOption}
+              handleShowLatest={handleShowLatest}
+              handleCompare={handleCompare}
+            />
             <KeywordsTable
               items={keywords}
               onDeselectAll={keywordsSelection.handleDeselectAll}
@@ -140,6 +170,7 @@ const Page = () => {
               onSelectOne={keywordsSelection.handleSelectOne}
               selected={keywordsSelection.selected}
               potentialKeywords
+              comparekeywords={comparekeywords}
             />
             <KeywordsTable
               items={potentialKeywords}
@@ -148,6 +179,7 @@ const Page = () => {
               onSelectAll={potentialKeywordsSelection.handleSelectAll}
               onSelectOne={potentialKeywordsSelection.handleSelectOne}
               selected={potentialKeywordsSelection.selected}
+              comparekeywords={comparePotentialKeywords}
             />
           </Stack>
         </Container>

@@ -58,6 +58,7 @@ export const ProjectFilter = () => {
   const handleClearFilter = () => {
     setSelectedFilter(1);
   };
+
   return (
     <Card
       sx={{
