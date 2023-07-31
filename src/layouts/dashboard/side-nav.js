@@ -50,8 +50,8 @@ export const SideNav = (props) => {
               justifyContent: "center",
               alignItems: "center",
               margin: "0 auto",
-              height: 110,
-              width: 110,
+              height: 100,
+              width: 100,
             }}
           >
             <img src="/assets/logos/logo.svg" className="img-fluid" />
@@ -70,15 +70,12 @@ export const SideNav = (props) => {
           >
             <div>
               <Typography color="inherit" variant="subtitle1">
-                Devias
+                Dashboard
               </Typography>
               <Typography color="neutral.400" variant="body2">
-                Production
+                Malik Hamza
               </Typography>
             </div>
-            <SvgIcon fontSize="small" sx={{ color: "neutral.500" }}>
-              <ChevronUpDownIcon />
-            </SvgIcon>
           </Box>
         </Box>
         <Divider sx={{ borderColor: "neutral.700" }} />
