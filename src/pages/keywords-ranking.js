@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Head from "next/head";
 import ArrowDownOnSquareIcon from "@heroicons/react/24/solid/ArrowDownOnSquareIcon";
 import ArrowUpOnSquareIcon from "@heroicons/react/24/solid/ArrowUpOnSquareIcon";
@@ -18,6 +18,7 @@ import { CustomersSearch } from "src/sections/customer/customers-search";
 import { applyPagination } from "src/utils/apply-pagination";
 import SEO from "@/components/seo";
 import { keyword_ranking_data } from "@/utils/keywords-ranking-data";
+import { GetProjectKeywords } from "@/utils/axios/axios";
 
 const useCustomerIds = (customers) => {
   return useMemo(() => {
@@ -28,6 +29,23 @@ const useCustomerIds = (customers) => {
 const Page = () => {
   const customersIds = useCustomerIds(keyword_ranking_data);
   const customersSelection = useSelection(customersIds);
+  const [keywords, setKeywords] = useState([]);
+  const [potentialKeywords, setPotentialKeywords] = useState([]);
+
+  useEffect(() => {
+    const fetchProjectKeywords = async () => {
+      const data = await GetProjectKeywords({
+        project_id: 75,
+      });
+      if (!data) {
+        return;
+      }
+      setKeywords(data.keywords);
+      setPotentialKeywords(data.potential_keywords);
+    };
+
+    fetchProjectKeywords();
+  }, []);
 
   return (
     <>
@@ -82,7 +100,7 @@ const Page = () => {
             </Stack>
             <CustomersSearch />
             <CustomersTable
-              items={keyword_ranking_data}
+              items={keywords}
               onDeselectAll={customersSelection.handleDeselectAll}
               onDeselectOne={customersSelection.handleDeselectOne}
               onSelectAll={customersSelection.handleSelectAll}
@@ -90,7 +108,7 @@ const Page = () => {
               selected={customersSelection.selected}
             />
             <CustomersTable
-              items={keyword_ranking_data}
+              items={potentialKeywords}
               onDeselectAll={customersSelection.handleDeselectAll}
               onDeselectOne={customersSelection.handleDeselectOne}
               onSelectAll={customersSelection.handleSelectAll}
