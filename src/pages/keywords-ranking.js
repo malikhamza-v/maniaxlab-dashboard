@@ -89,6 +89,14 @@ const Page = () => {
               onSelectOne={customersSelection.handleSelectOne}
               selected={customersSelection.selected}
             />
+            <CustomersTable
+              items={keyword_ranking_data}
+              onDeselectAll={customersSelection.handleDeselectAll}
+              onDeselectOne={customersSelection.handleDeselectOne}
+              onSelectAll={customersSelection.handleSelectAll}
+              onSelectOne={customersSelection.handleSelectOne}
+              selected={customersSelection.selected}
+            />
           </Stack>
         </Container>
       </Box>
