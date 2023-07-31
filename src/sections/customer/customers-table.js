@@ -19,7 +19,7 @@ import { Scrollbar } from "src/components/scrollbar";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 function EnhancedTableToolbar(props) {
-  const { numSelected } = props;
+  const { numSelected, potentialKeywords } = props;
 
   return (
     <Toolbar
@@ -51,7 +51,7 @@ function EnhancedTableToolbar(props) {
           id="tableTitle"
           component="div"
         >
-          Potential Keywords
+          {`${potentialKeywords ? "Potential" : "Priority"} Keywords`}
         </Typography>
       )}
 
@@ -74,6 +74,7 @@ export const CustomersTable = (props) => {
     onSelectAll,
     onSelectOne,
     selected = [],
+    potentialKeywords,
   } = props;
 
   const selectedSome = selected.length > 0 && selected.length < items.length;
@@ -83,7 +84,10 @@ export const CustomersTable = (props) => {
     <Card>
       <Scrollbar>
         <Box sx={{ minWidth: 800 }}>
-          <EnhancedTableToolbar numSelected={selected.length} />
+          <EnhancedTableToolbar
+            numSelected={selected.length}
+            potentialKeywords={potentialKeywords}
+          />
           <TableContainer>
             <Table>
               <TableHead>

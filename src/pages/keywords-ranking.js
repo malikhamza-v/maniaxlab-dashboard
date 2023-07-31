@@ -1,5 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import Head from "next/head";
+import { useEffect, useMemo, useState } from "react";
 import ArrowDownOnSquareIcon from "@heroicons/react/24/solid/ArrowDownOnSquareIcon";
 import ArrowUpOnSquareIcon from "@heroicons/react/24/solid/ArrowUpOnSquareIcon";
 import PlusIcon from "@heroicons/react/24/solid/PlusIcon";
@@ -17,7 +16,6 @@ import { CustomersTable } from "src/sections/customer/customers-table";
 import { CustomersSearch } from "src/sections/customer/customers-search";
 import { applyPagination } from "src/utils/apply-pagination";
 import SEO from "@/components/seo";
-import { keyword_ranking_data } from "@/utils/keywords-ranking-data";
 import { GetProjectKeywords } from "@/utils/axios/axios";
 
 const useCustomerIds = (customers) => {
@@ -27,8 +25,6 @@ const useCustomerIds = (customers) => {
 };
 
 const Page = () => {
-  const customersIds = useCustomerIds(keyword_ranking_data);
-  const customersSelection = useSelection(customersIds);
   const [keywords, setKeywords] = useState([]);
   const [potentialKeywords, setPotentialKeywords] = useState([]);
 
@@ -47,6 +43,10 @@ const Page = () => {
     fetchProjectKeywords();
   }, []);
 
+  const keywordIds = useCustomerIds(keywords);
+  const keywordsSelection = useSelection(keywordIds);
+  const potentialKeywordIds = useCustomerIds(keywords);
+  const potentialKeywordsSelection = useSelection(potentialKeywordIds);
   return (
     <>
       <SEO pageTitle="Keywords Ranking" />
@@ -101,19 +101,20 @@ const Page = () => {
             <CustomersSearch />
             <CustomersTable
               items={keywords}
-              onDeselectAll={customersSelection.handleDeselectAll}
-              onDeselectOne={customersSelection.handleDeselectOne}
-              onSelectAll={customersSelection.handleSelectAll}
-              onSelectOne={customersSelection.handleSelectOne}
-              selected={customersSelection.selected}
+              onDeselectAll={keywordsSelection.handleDeselectAll}
+              onDeselectOne={keywordsSelection.handleDeselectOne}
+              onSelectAll={keywordsSelection.handleSelectAll}
+              onSelectOne={keywordsSelection.handleSelectOne}
+              selected={keywordsSelection.selected}
+              potentialKeywords
             />
             <CustomersTable
               items={potentialKeywords}
-              onDeselectAll={customersSelection.handleDeselectAll}
-              onDeselectOne={customersSelection.handleDeselectOne}
-              onSelectAll={customersSelection.handleSelectAll}
-              onSelectOne={customersSelection.handleSelectOne}
-              selected={customersSelection.selected}
+              onDeselectAll={potentialKeywordsSelection.handleDeselectAll}
+              onDeselectOne={potentialKeywordsSelection.handleDeselectOne}
+              onSelectAll={potentialKeywordsSelection.handleSelectAll}
+              onSelectOne={potentialKeywordsSelection.handleSelectOne}
+              selected={potentialKeywordsSelection.selected}
             />
           </Stack>
         </Container>
