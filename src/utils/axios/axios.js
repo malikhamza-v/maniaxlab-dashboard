@@ -20,3 +20,28 @@ export const GetProjectKeywords = async (data) => {
       }
     });
 };
+
+export const loginUser = async (data) => {
+  return await axios
+    .post("login/", data)
+    .then((res) => {
+      localStorage.setItem("token", res.data.token);
+      return res.data.user;
+    })
+    .catch((error) => {
+      return false;
+    });
+};
+
+export const loginWithToken = async () => {
+  return await axios
+    .get("token-login/", {
+      headers: {
+        Authorization: `Token ${localStorage.getItem("token")}`,
+      },
+    })
+    .then((res) => {
+      return res.data;
+    })
+    .catch((error) => {});
+};

@@ -37,17 +37,8 @@ export const items = [
     ),
   },
   {
-    title: "Payment Info",
-    path: "/companie",
-    icon: (
-      <SvgIcon fontSize="small">
-        <ShoppingBagIcon />
-      </SvgIcon>
-    ),
-  },
-  {
     title: "Referral Code",
-    path: "/companie",
+    path: "/referral-code",
     icon: (
       <SvgIcon fontSize="small">
         <ShoppingBagIcon />

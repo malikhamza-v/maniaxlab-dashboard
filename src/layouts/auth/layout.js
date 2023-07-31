@@ -1,8 +1,11 @@
 import PropTypes from "prop-types";
 import NextLink from "next/link";
-import { Box, Typography, Unstable_Grid2 as Grid } from "@mui/material";
-
-// TODO: Change subtitle text
+import {
+  Box,
+  Typography,
+  Unstable_Grid2 as Grid,
+  Container,
+} from "@mui/material";
 
 export const Layout = (props) => {
   const { children } = props;
@@ -41,11 +44,11 @@ export const Layout = (props) => {
               href="/"
               sx={{
                 display: "inline-flex",
-                height: 32,
-                width: 32,
+                height: 90,
+                width: 90,
               }}
             >
-              <img src="/assets/logos/logo.svg" className="img-fluid" />
+              <img src="/assets/logos/black-logo.svg" className="img-fluid" />
             </Box>
           </Box>
           {children}
@@ -78,13 +81,20 @@ export const Layout = (props) => {
             >
               Welcome to{" "}
               <Box component="a" sx={{ color: "#15B79E" }} target="_blank">
-                Devias Kit
+                Maniax Lab
               </Box>
             </Typography>
             <Typography align="center" sx={{ mb: 3 }} variant="subtitle1">
-              A professional kit that comes with ready-to-use MUI components.
+              Access a user-friendly dashboard to track your project progress,
+              ensuring your investments are in good hands.{" "}
             </Typography>
-            <img alt="" src="/assets/auth-illustration.svg" />
+            <Container sx={{ width: "60%" }}>
+              <img
+                alt="Maniax Lab Login"
+                src="/assets/login-image.svg"
+                className="img-fluid"
+              />
+            </Container>
           </Box>
         </Grid>
       </Grid>

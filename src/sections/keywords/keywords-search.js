@@ -113,6 +113,7 @@ export const KeywordsSearch = ({
         <div>
           <Button
             onClick={() => handleCompare(selectedFilter)}
+            disabled={selectedFilter === 0 ? true : false}
             sx={{ marginRight: "10px" }}
             startIcon={
               <SvgIcon fontSize="small">

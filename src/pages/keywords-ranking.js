@@ -36,7 +36,7 @@ const Page = () => {
   useEffect(() => {
     const fetchProjectKeywords = async () => {
       const data = await GetProjectKeywords({
-        project_id: 75,
+        project_id: 76,
       });
       if (!data) {
         return;
