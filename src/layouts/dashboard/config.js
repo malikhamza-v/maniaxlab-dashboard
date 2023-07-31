@@ -20,7 +20,7 @@ export const items = [
   },
   {
     title: "Keywords Ranking",
-    path: "/customers",
+    path: "/keywords-ranking",
     icon: (
       <SvgIcon fontSize="small">
         <UsersIcon />
@@ -45,49 +45,13 @@ export const items = [
       </SvgIcon>
     ),
   },
-  // {
-  //   title: "Account",
-  //   path: "/account",
-  //   icon: (
-  //     <SvgIcon fontSize="small">
-  //       <UserIcon />
-  //     </SvgIcon>
-  //   ),
-  // },
-  // {
-  //   title: "Settings",
-  //   path: "/settings",
-  //   icon: (
-  //     <SvgIcon fontSize="small">
-  //       <CogIcon />
-  //     </SvgIcon>
-  //   ),
-  // },
-  // {
-  //   title: "Login",
-  //   path: "/auth/login",
-  //   icon: (
-  //     <SvgIcon fontSize="small">
-  //       <LockClosedIcon />
-  //     </SvgIcon>
-  //   ),
-  // },
-  // {
-  //   title: "Register",
-  //   path: "/auth/register",
-  //   icon: (
-  //     <SvgIcon fontSize="small">
-  //       <UserPlusIcon />
-  //     </SvgIcon>
-  //   ),
-  // },
-  // {
-  //   title: "Error",
-  //   path: "/404",
-  //   icon: (
-  //     <SvgIcon fontSize="small">
-  //       <XCircleIcon />
-  //     </SvgIcon>
-  //   ),
-  // },
+  {
+    title: "Referral Code",
+    path: "/companie",
+    icon: (
+      <SvgIcon fontSize="small">
+        <ShoppingBagIcon />
+      </SvgIcon>
+    ),
+  },
 ];

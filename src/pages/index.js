@@ -33,7 +33,11 @@ const UserProfile = () => (
             <Typography variant="h4">Account</Typography>
           </div>
           <div>
-            <Grid container spacing={3}>
+            <Grid
+              container
+              spacing={3}
+              sx={{ display: "flex", alignItems: "center" }}
+            >
               <Grid xs={12} md={6} lg={4}>
                 <AccountProfile />
               </Grid>
