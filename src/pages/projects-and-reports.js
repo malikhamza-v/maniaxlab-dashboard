@@ -6,10 +6,10 @@ import {
   Unstable_Grid2 as Grid,
 } from "@mui/material";
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
-import { CompanyCard } from "src/sections/companies/company-card";
+import { ProjectCard } from "@/sections/projects/project-card";
 import SEO from "@/components/seo";
 import { client_projects_data } from "@/utils/client-project-data";
-import { ProjectFilter } from "@/sections/companies/companies-search";
+import { ProjectFilter } from "@/sections/projects/project-filter";
 
 const Page = () => (
   <>
@@ -32,7 +32,7 @@ const Page = () => (
           <Grid container spacing={3}>
             {client_projects_data.map((item, index) => (
               <Grid xs={12} md={12} lg={12} key={index}>
-                <CompanyCard data={item} />
+                <ProjectCard data={item} />
               </Grid>
             ))}
           </Grid>
