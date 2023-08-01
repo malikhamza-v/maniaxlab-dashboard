@@ -1,7 +1,18 @@
-import { Box, Container, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  Stack,
+  SvgIcon,
+  Typography,
+} from "@mui/material";
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
 import SEO from "@/components/seo";
 import ReferralCode from "@/sections/referral/referral-code";
+import ArrowDownOnSquareIcon from "@heroicons/react/24/solid/ArrowDownOnSquareIcon";
+import ArrowUpOnSquareIcon from "@heroicons/react/24/solid/ArrowUpOnSquareIcon";
+import PlusIcon from "@heroicons/react/24/solid/PlusIcon";
+import { KeywordsSearch } from "@/sections/keywords/keywords-search";
 
 const Page = () => {
   return (
@@ -22,16 +33,6 @@ const Page = () => {
               </Stack>
             </Stack>
             <ReferralCode />
-            {/* <KeywordsTable
-              items={keywords}
-              onDeselectAll={keywordsSelection.handleDeselectAll}
-              onDeselectOne={keywordsSelection.handleDeselectOne}
-              onSelectAll={keywordsSelection.handleSelectAll}
-              onSelectOne={keywordsSelection.handleSelectOne}
-              selected={keywordsSelection.selected}
-              potentialKeywords
-              comparekeywords={comparekeywords}
-            /> */}
           </Stack>
         </Container>
       </Box>

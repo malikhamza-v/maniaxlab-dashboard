@@ -1,13 +1,21 @@
 import {
   Box,
   Button,
+  Card,
+  FormControl,
   InputAdornment,
   MenuItem,
   OutlinedInput,
+  Select,
   SvgIcon,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
-import React from "react";
+import React, { useContext } from "react";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
+import PlusIcon from "@heroicons/react/24/solid/PlusIcon";
+import { GenerateReferralCode } from "@/utils/axios/axios";
+import { AuthContext } from "@/contexts/auth-context";
 
 const ReferralCodeIcon = () => (
   <svg
@@ -27,45 +35,128 @@ const ReferralCodeIcon = () => (
 );
 
 const ReferralCode = () => {
+  const theme = useTheme();
+
+  const { user, refreshUser } = useContext(AuthContext);
+
+  console.log("==user", user);
+
+  const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"));
+
+  const handleGenerate = async () => {
+    const status = await GenerateReferralCode({
+      user_id: user.id,
+    });
+
+    if (status) {
+      refreshUser();
+    }
+  };
+
   return (
-    <Box
+    <Card
       sx={{
+        p: 2,
         display: "flex",
-        justifyContent: "space-between",
+        flexDirection: isMediumScreen ? "column" : "row",
+        gap: isMediumScreen ? "1rem" : "0px",
         alignItems: "center",
+        justifyContent: "space-between",
       }}
     >
-      <OutlinedInput
-        defaultValue=""
-        fullWidth
-        disabled
-        startAdornment={
-          <InputAdornment position="start">
-            <SvgIcon color="action" fontSize="small">
-              <ReferralCodeIcon />
-            </SvgIcon>
-          </InputAdornment>
-        }
-        sx={{ maxWidth: 500 }}
-      />
-
-      <div>
-        <Button
-          //   onClick={() => handleCompare(selectedFilter)}
-          //   disabled={selectedFilter === 0 ? true : false}
-          sx={{ marginRight: "10px" }}
-          startIcon={
-            <SvgIcon fontSize="small">
-              <AttachFileIcon />
-              {/* <CompareArrowsOutlinedIcon /> */}
-            </SvgIcon>
+      <FormControl sx={{ width: "60%", border: "none", outline: "none" }}>
+        <OutlinedInput
+          fullWidth
+          placeholder="Generate a referral code"
+          disabled
+          value={user?.coupon?.coupon}
+          startAdornment={
+            <InputAdornment position="start">
+              <SvgIcon color="action" fontSize="small">
+                <ReferralCodeIcon />
+              </SvgIcon>
+            </InputAdornment>
           }
-          variant="contained"
-        >
-          Copy to clipboard
-        </Button>
-      </div>
-    </Box>
+          sx={{ maxWidth: 500 }}
+        />
+      </FormControl>
+      <Box
+        sx={{
+          display: "flex",
+        }}
+      >
+        {!user?.coupon?.coupon && (
+          <div>
+            <Button
+              onClick={handleGenerate}
+              sx={{ marginRight: "10px" }}
+              startIcon={
+                <SvgIcon fontSize="small">
+                  <PlusIcon />
+                </SvgIcon>
+              }
+              variant="contained"
+            >
+              Generate
+            </Button>
+          </div>
+        )}
+        {/* <div>
+          <Button
+            onClick={() => {
+              handleShowLatest();
+              setSelectedFilter(0);
+            }}
+            startIcon={
+              <SvgIcon fontSize="small">
+                <TipsAndUpdatesOutlinedIcon />
+              </SvgIcon>
+            }
+            variant="contained"
+          >
+            Show Latest
+          </Button>
+        </div> */}
+      </Box>
+    </Card>
+    // <Box
+    //   sx={{
+    //     display: "flex",
+    //     justifyContent: "space-between",
+    //     alignItems: "center",
+    //   }}
+    // >
+    //   <OutlinedInput
+    //     defaultValue=""
+    //     fullWidth
+    //     disabled
+    //     startAdornment={
+    //       <InputAdornment position="start">
+    //         <SvgIcon color="action" fontSize="small">
+    //           <ReferralCodeIcon />
+    //         </SvgIcon>
+    //       </InputAdornment>
+    //     }
+    //     sx={{ maxWidth: 500 }}
+    //   />
+
+    //   <div>
+    //     <Button
+    //       //   onClick={() => handleCompare(selectedFilter)}
+    //       //   disabled={selectedFilter === 0 ? true : false}
+    //       sx={{ marginRight: "10px" }}
+    //       startIcon={
+    //         <SvgIcon fontSize="small">
+    //           <AttachFileIcon />
+    //           {/* <CompareArrowsOutlinedIcon /> */}
+    //         </SvgIcon>
+    //       }
+    //       variant="contained"
+    //     >
+    //       Copy to clipboard
+    //     </Button>
+    //   </div>
+    // </Box>
   );
 };
 

@@ -14,7 +14,7 @@ export const GetProjectKeywords = async (data) => {
       } else {
         enqueueSnackbar(res.data.error_message, {
           variant: "error",
-          style: { borderRadius: "20%" },
+          style: { borderRadius: 100 },
         });
         return false;
       }
@@ -54,4 +54,26 @@ export const UpdateUserInfo = async (user_id, data) => {
       return false;
     }
   });
+};
+
+export const GenerateReferralCode = async (data) => {
+  return await axios
+    .post("payments/generate-referral-code/", data)
+    .then((res) => {
+      console.log("=res", res);
+      if (res.data.status === 400) {
+        enqueueSnackbar(res.data.message, {
+          variant: "info",
+          style: { borderRadius: 100 },
+        });
+        return false;
+      } else if (res.data.status === 201) {
+        enqueueSnackbar(res.data.message, {
+          variant: "success",
+          style: { borderRadius: 100 },
+        });
+        return true;
+      }
+      return true;
+    });
 };

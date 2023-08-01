@@ -80,6 +80,7 @@ export const KeywordsSearch = ({
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           value={selectedFilter}
+          disabled={compareOption.length === 1 ? true : false}
           sx={{
             border: "none",
             outline: "none",
