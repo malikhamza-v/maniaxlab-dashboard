@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useContext, useState } from "react";
 import {
   Button,
   Card,
@@ -9,6 +9,9 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
+import { enqueueSnackbar } from "notistack";
+import { UpdateUserInfo } from "@/utils/axios/axios";
+import { AuthContext } from "@/contexts/auth-context";
 
 export const SettingsPassword = () => {
   const [values, setValues] = useState({
@@ -16,16 +19,39 @@ export const SettingsPassword = () => {
     confirm: "",
   });
 
-  const handleChange = useCallback((event) => {
+  const { user } = useContext(AuthContext);
+
+  const handleChange = (event) => {
     setValues((prevState) => ({
       ...prevState,
       [event.target.name]: event.target.value,
     }));
-  }, []);
+  };
 
-  const handleSubmit = useCallback((event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-  }, []);
+    if (values.password !== "" && values.confirm !== "") {
+      const status = await UpdateUserInfo(user.id, {
+        password: values.password,
+      });
+      if (status) {
+        enqueueSnackbar("Password changed successfully!", {
+          variant: "success",
+          style: { borderRadius: 100 },
+        });
+      } else {
+        enqueueSnackbar("Server error! Please try again later", {
+          variant: "error",
+          style: { borderRadius: 100 },
+        });
+      }
+    } else {
+      enqueueSnackbar("Password do not match!", {
+        variant: "error",
+        style: { borderRadius: 100 },
+      });
+    }
+  };
 
   return (
     <form onSubmit={handleSubmit}>
@@ -54,7 +80,9 @@ export const SettingsPassword = () => {
         </CardContent>
         <Divider />
         <CardActions sx={{ justifyContent: "flex-end" }}>
-          <Button variant="contained">Update</Button>
+          <Button variant="contained" type="submit">
+            Update
+          </Button>
         </CardActions>
       </Card>
     </form>

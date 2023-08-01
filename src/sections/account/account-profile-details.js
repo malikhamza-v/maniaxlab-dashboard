@@ -61,7 +61,16 @@ export const AccountProfileDetails = () => {
     });
 
     if (status) {
+      enqueueSnackbar("User updated successfully!", {
+        variant: "success",
+        style: { borderRadius: 100 },
+      });
       refreshUser();
+    } else {
+      enqueueSnackbar("Server error! Please try again later", {
+        variant: "error",
+        style: { borderRadius: 100 },
+      });
     }
   };
 

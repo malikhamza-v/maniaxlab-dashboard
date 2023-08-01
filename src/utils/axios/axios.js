@@ -49,16 +49,8 @@ export const loginWithToken = async () => {
 export const UpdateUserInfo = async (user_id, data) => {
   return await axios.put(`update-user/${user_id}/`, data).then(async (res) => {
     if (res.data.status === 204) {
-      enqueueSnackbar(res.data.message, {
-        variant: "success",
-        style: { borderRadius: 100 },
-      });
       return true;
     } else if (res.data.status === 500) {
-      enqueueSnackbar(res.data.message, {
-        variant: "error",
-        style: { borderRadius: 100 },
-      });
       return false;
     }
   });
