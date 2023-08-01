@@ -5,8 +5,6 @@ import { OverviewTotalCustomers } from "src/sections/overview/overview-total-cus
 import { OverviewTotalProfit } from "src/sections/overview/overview-total-profit";
 import SEO from "@/components/seo";
 
-const now = new Date();
-
 import {
   Box,
   Container,
@@ -65,16 +63,10 @@ const HomePage = () => (
       <Container maxWidth="xl">
         <Grid container spacing={3}>
           <Grid xs={12} sm={6} lg={3}>
-            <OverviewBudget
-              difference={12}
-              positive
-              sx={{ height: "100%" }}
-              value="$24k"
-            />
+            <OverviewBudget positive sx={{ height: "100%" }} value="$24k" />
           </Grid>
           <Grid xs={12} sm={6} lg={3}>
             <OverviewTotalCustomers
-              difference={16}
               positive={false}
               sx={{ height: "100%" }}
               value="1.6k"

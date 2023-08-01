@@ -77,7 +77,7 @@ export const AccountProfileDetails = () => {
   return (
     <form autoComplete="off" noValidate onSubmit={handleSubmit}>
       <Card>
-        <CardHeader subheader="The information can be edited" title="Profile" />
+        <CardHeader title="Profile" />
         <CardContent sx={{ pt: 0 }}>
           <Box sx={{ m: -1.5 }}>
             <Grid container spacing={3}>
