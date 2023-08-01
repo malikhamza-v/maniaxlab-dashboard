@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import CurrencyDollarIcon from "@heroicons/react/24/solid/CurrencyDollarIcon";
+import AlignHorizontalLeftIcon from "@mui/icons-material/AlignHorizontalLeft";
 import {
   Avatar,
   Card,
@@ -35,7 +35,7 @@ export const OverviewBudget = (props) => {
             }}
           >
             <SvgIcon>
-              <CurrencyDollarIcon />
+              <AlignHorizontalLeftIcon />
             </SvgIcon>
           </Avatar>
         </Stack>

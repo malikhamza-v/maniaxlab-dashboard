@@ -15,6 +15,8 @@ import {
 import { AccountProfile } from "src/sections/account/account-profile";
 import { AccountProfileDetails } from "src/sections/account/account-profile-details";
 import { SettingsPassword } from "@/sections/settings/settings-password";
+import { useEffect, useState } from "react";
+import { GetUserStats } from "@/utils/axios/axios";
 
 const UserProfile = () => (
   <>
@@ -50,47 +52,68 @@ const UserProfile = () => (
   </>
 );
 
-const HomePage = () => (
-  <>
-    <SEO pageTitle="Dashboard" />
-    <Box
-      component="main"
-      sx={{
-        flexGrow: 1,
-        py: 8,
-      }}
-    >
-      <Container maxWidth="xl">
-        <Grid container spacing={3}>
-          <Grid xs={12} sm={6} lg={3}>
-            <OverviewBudget positive sx={{ height: "100%" }} value="$24k" />
-          </Grid>
-          <Grid xs={12} sm={6} lg={3}>
-            <OverviewTotalCustomers
-              positive={false}
-              sx={{ height: "100%" }}
-              value="1.6k"
-            />
-          </Grid>
-          <Grid xs={12} sm={6} lg={3}>
-            <OverviewTasksProgress sx={{ height: "100%" }} value={75.5} />
-          </Grid>
-          <Grid xs={12} sm={6} lg={3}>
-            <OverviewTotalProfit sx={{ height: "100%" }} value="$15k" />
-          </Grid>
-          <UserProfile />
-          <Container maxWidth="lg">
-            <Stack spacing={3}>
-              <Typography variant="h4">Settings</Typography>
-              <SettingsPassword />
-            </Stack>
-          </Container>
-        </Grid>
-      </Container>
-    </Box>
-  </>
-);
+const HomePage = () => {
+  const [userStats, setUserStats] = useState({});
 
+  useEffect(() => {
+    const fetchUserStats = async () => {
+      const data = await GetUserStats();
+      setUserStats(data);
+    };
+    fetchUserStats();
+  }, []);
+
+  return (
+    <>
+      <SEO pageTitle="Dashboard" />
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          py: 8,
+        }}
+      >
+        <Container maxWidth="xl">
+          <Grid container spacing={3}>
+            <Grid xs={12} sm={6} lg={3}>
+              <OverviewBudget
+                positive
+                sx={{ height: "100%" }}
+                value={userStats.total_projects}
+              />
+            </Grid>
+            <Grid xs={12} sm={6} lg={3}>
+              <OverviewTotalCustomers
+                positive={false}
+                sx={{ height: "100%" }}
+                value={`$ ${userStats.total_spent}`}
+              />
+            </Grid>
+            <Grid xs={12} sm={6} lg={3}>
+              <OverviewTasksProgress
+                sx={{ height: "100%" }}
+                value={userStats.projects_in_progress}
+              />
+            </Grid>
+            <Grid xs={12} sm={6} lg={3}>
+              <OverviewTotalProfit
+                sx={{ height: "100%" }}
+                value={`$ ${userStats.referral_profit}`}
+              />
+            </Grid>
+            <UserProfile />
+            <Container maxWidth="lg">
+              <Stack spacing={3}>
+                <Typography variant="h4">Settings</Typography>
+                <SettingsPassword />
+              </Stack>
+            </Container>
+          </Grid>
+        </Container>
+      </Box>
+    </>
+  );
+};
 HomePage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default HomePage;

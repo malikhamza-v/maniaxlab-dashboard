@@ -89,3 +89,15 @@ export const GetProjects = async (data) => {
       return res.data;
     });
 };
+
+export const GetUserStats = async () => {
+  return await axios
+    .get("get-user-stats/", {
+      headers: {
+        Authorization: `Token ${localStorage.getItem("token")}`,
+      },
+    })
+    .then((res) => {
+      return res.data;
+    });
+};

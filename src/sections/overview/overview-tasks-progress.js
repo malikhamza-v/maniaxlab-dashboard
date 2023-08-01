@@ -23,9 +23,9 @@ export const OverviewTasksProgress = (props) => {
         >
           <Stack spacing={1}>
             <Typography color="text.secondary" gutterBottom variant="overline">
-              Project Progress
+              Tasks Inprogress
             </Typography>
-            <Typography variant="h4">{value}%</Typography>
+            <Typography variant="h4">{value}</Typography>
           </Stack>
           <Avatar
             sx={{
