@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useContext, useState } from "react";
 import {
   Box,
   Button,
@@ -10,6 +10,8 @@ import {
   TextField,
   Unstable_Grid2 as Grid,
 } from "@mui/material";
+import { AuthContext } from "@/contexts/auth-context";
+import { Country, State } from "country-state-city";
 
 const states = [
   {
@@ -31,14 +33,9 @@ const states = [
 ];
 
 export const AccountProfileDetails = () => {
-  const [values, setValues] = useState({
-    firstName: "Anika",
-    lastName: "Visser",
-    email: "demo@devias.io",
-    phone: "",
-    state: "los-angeles",
-    country: "USA",
-  });
+  const { user } = useContext(AuthContext);
+
+  const [values, setValues] = useState(user);
 
   const handleChange = useCallback((event) => {
     setValues((prevState) => ({
@@ -66,7 +63,7 @@ export const AccountProfileDetails = () => {
                   name="firstName"
                   onChange={handleChange}
                   required
-                  value={values.firstName}
+                  value={values.first_name}
                 />
               </Grid>
               <Grid xs={12} md={6}>
@@ -76,7 +73,7 @@ export const AccountProfileDetails = () => {
                   name="lastName"
                   onChange={handleChange}
                   required
-                  value={values.lastName}
+                  value={values.last_name}
                 />
               </Grid>
               <Grid xs={12} md={6}>
@@ -96,7 +93,7 @@ export const AccountProfileDetails = () => {
                   name="phone"
                   onChange={handleChange}
                   type="number"
-                  value={values.phone}
+                  value={values.phone_no}
                 />
               </Grid>
               <Grid xs={12} md={6}>
@@ -106,8 +103,18 @@ export const AccountProfileDetails = () => {
                   name="country"
                   onChange={handleChange}
                   required
-                  value={values.country}
-                />
+                  select
+                  SelectProps={{ native: true }}
+                  value={values.billing_info?.country}
+                >
+                  {Country.getAllCountries().map((item, index) => {
+                    return (
+                      <option key={index} value={item.isoCode}>
+                        {item.name}
+                      </option>
+                    );
+                  })}
+                </TextField>
               </Grid>
               <Grid xs={12} md={6}>
                 <TextField
@@ -118,8 +125,18 @@ export const AccountProfileDetails = () => {
                   required
                   select
                   SelectProps={{ native: true }}
-                  value={values.state}
+                  value={values.billing_info?.state}
                 >
+                  {State.getStatesOfCountry(values.billing_info?.country)?.map(
+                    (item, index) => {
+                      return (
+                        <option key={index} value={item.isoCode}>
+                          {item.name}
+                        </option>
+                      );
+                    }
+                  )}
+
                   {states.map((option) => (
                     <option key={option.value} value={option.value}>
                       {option.label}

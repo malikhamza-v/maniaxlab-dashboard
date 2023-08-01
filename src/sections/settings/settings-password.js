@@ -33,7 +33,7 @@ export const SettingsPassword = () => {
         <CardHeader subheader="Update password" title="Password" />
         <Divider />
         <CardContent>
-          <Stack spacing={3} sx={{ maxWidth: 400 }}>
+          <Stack spacing={3}>
             <TextField
               fullWidth
               label="Password"

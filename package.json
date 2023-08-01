@@ -21,6 +21,7 @@
     "@mui/x-date-pickers": "5.0.19",
     "apexcharts": "3.37.0",
     "axios": "^1.4.0",
+    "country-state-city": "^3.1.4",
     "date-fns": "2.29.3",
     "formik": "2.2.9",
     "next": "13.4.12",
