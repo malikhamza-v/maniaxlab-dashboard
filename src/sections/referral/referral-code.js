@@ -39,8 +39,6 @@ const ReferralCode = () => {
 
   const { user, refreshUser } = useContext(AuthContext);
 
-  console.log("==user", user);
-
   const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"));
 
   const handleGenerate = async () => {

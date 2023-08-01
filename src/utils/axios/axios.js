@@ -60,7 +60,6 @@ export const GenerateReferralCode = async (data) => {
   return await axios
     .post("payments/generate-referral-code/", data)
     .then((res) => {
-      console.log("=res", res);
       if (res.data.status === 400) {
         enqueueSnackbar(res.data.message, {
           variant: "info",
@@ -75,5 +74,18 @@ export const GenerateReferralCode = async (data) => {
         return true;
       }
       return true;
+    });
+};
+
+export const GetProjects = async (data) => {
+  return await axios
+    .get("get-client-projects/", {
+      params: data,
+      headers: {
+        Authorization: `Token ${localStorage.getItem("token")}`,
+      },
+    })
+    .then((res) => {
+      return res.data;
     });
 };

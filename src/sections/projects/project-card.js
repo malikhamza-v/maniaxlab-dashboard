@@ -143,7 +143,7 @@ export const ProjectCard = (props) => {
         <Typography gutterBottom variant="h5">
           {data.project_name}
         </Typography>
-        <Typography variant="body1">{data.project_description}</Typography>
+        <Typography variant="body1">{data.project_desc}</Typography>
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Box sx={{ width: "100%", mr: 3 }}>
             <ProgressBar
