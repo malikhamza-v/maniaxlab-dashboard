@@ -1,4 +1,4 @@
-import { useCallback, useContext, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import { AuthContext } from "@/contexts/auth-context";
 import { Country, State } from "country-state-city";
+import { UpdateUserInfo, loginWithToken } from "@/utils/axios/axios";
 
 const states = [
   {
@@ -33,20 +34,36 @@ const states = [
 ];
 
 export const AccountProfileDetails = () => {
-  const { user } = useContext(AuthContext);
+  const { user, refreshUser } = useContext(AuthContext);
 
   const [values, setValues] = useState(user);
 
-  const handleChange = useCallback((event) => {
+  useEffect(() => {
+    if (user.id !== null) {
+      setValues(user);
+    }
+  }, [user]);
+
+  const handleChange = (event) => {
     setValues((prevState) => ({
       ...prevState,
       [event.target.name]: event.target.value,
     }));
-  }, []);
+  };
 
-  const handleSubmit = useCallback((event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-  }, []);
+
+    const status = await UpdateUserInfo(values.id, {
+      first_name: values.first_name,
+      last_name: values.last_name,
+      phone_no: values.phone_no,
+    });
+
+    if (status) {
+      refreshUser();
+    }
+  };
 
   return (
     <form autoComplete="off" noValidate onSubmit={handleSubmit}>
@@ -60,7 +77,7 @@ export const AccountProfileDetails = () => {
                   fullWidth
                   helperText="Please specify the first name"
                   label="First name"
-                  name="firstName"
+                  name="first_name"
                   onChange={handleChange}
                   required
                   value={values.first_name}
@@ -70,7 +87,7 @@ export const AccountProfileDetails = () => {
                 <TextField
                   fullWidth
                   label="Last name"
-                  name="lastName"
+                  name="last_name"
                   onChange={handleChange}
                   required
                   value={values.last_name}
@@ -81,7 +98,7 @@ export const AccountProfileDetails = () => {
                   fullWidth
                   label="Email Address"
                   name="email"
-                  onChange={handleChange}
+                  disabled
                   required
                   value={values.email}
                 />
@@ -90,7 +107,7 @@ export const AccountProfileDetails = () => {
                 <TextField
                   fullWidth
                   label="Phone Number"
-                  name="phone"
+                  name="phone_no"
                   onChange={handleChange}
                   type="number"
                   value={values.phone_no}
@@ -101,8 +118,8 @@ export const AccountProfileDetails = () => {
                   fullWidth
                   label="Country"
                   name="country"
-                  onChange={handleChange}
                   required
+                  disabled
                   select
                   SelectProps={{ native: true }}
                   value={values.billing_info?.country}
@@ -121,9 +138,9 @@ export const AccountProfileDetails = () => {
                   fullWidth
                   label="Select State"
                   name="state"
-                  onChange={handleChange}
                   required
                   select
+                  disabled
                   SelectProps={{ native: true }}
                   value={values.billing_info?.state}
                 >
@@ -149,7 +166,9 @@ export const AccountProfileDetails = () => {
         </CardContent>
         <Divider />
         <CardActions sx={{ justifyContent: "flex-end" }}>
-          <Button variant="contained">Save details</Button>
+          <Button variant="contained" type="submit">
+            Save details
+          </Button>
         </CardActions>
       </Card>
     </form>

@@ -109,6 +109,15 @@ export const AuthProvider = (props) => {
     });
   };
 
+  const refreshUser = async () => {
+    const user = await loginWithToken();
+
+    dispatch({
+      type: HANDLERS.INITIALIZE,
+      payload: user,
+    });
+  };
+
   const signOut = () => {
     localStorage.clear();
     dispatch({
@@ -122,6 +131,7 @@ export const AuthProvider = (props) => {
         ...state,
         signIn,
         signOut,
+        refreshUser,
       }}
     >
       {children}
