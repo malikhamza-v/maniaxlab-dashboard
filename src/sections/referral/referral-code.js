@@ -4,9 +4,7 @@ import {
   Card,
   FormControl,
   InputAdornment,
-  MenuItem,
   OutlinedInput,
-  Select,
   SvgIcon,
   useMediaQuery,
   useTheme,
@@ -16,6 +14,7 @@ import AttachFileIcon from "@mui/icons-material/AttachFile";
 import PlusIcon from "@heroicons/react/24/solid/PlusIcon";
 import { GenerateReferralCode } from "@/utils/axios/axios";
 import { AuthContext } from "@/contexts/auth-context";
+import { enqueueSnackbar } from "notistack";
 
 const ReferralCodeIcon = () => (
   <svg
@@ -83,7 +82,7 @@ const ReferralCode = () => {
           display: "flex",
         }}
       >
-        {!user?.coupon?.coupon && (
+        {!user?.coupon?.coupon ? (
           <div>
             <Button
               onClick={handleGenerate}
@@ -98,63 +97,29 @@ const ReferralCode = () => {
               Generate
             </Button>
           </div>
+        ) : (
+          <div>
+            <Button
+              onClick={() => {
+                navigator.clipboard.writeText(user.coupon.coupon);
+                enqueueSnackbar("Copied!", {
+                  variant: "success",
+                  style: { borderRadius: 100 },
+                });
+              }}
+              startIcon={
+                <SvgIcon fontSize="small">
+                  <AttachFileIcon />
+                </SvgIcon>
+              }
+              variant="contained"
+            >
+              Copy To Clipboard
+            </Button>
+          </div>
         )}
-        {/* <div>
-          <Button
-            onClick={() => {
-              handleShowLatest();
-              setSelectedFilter(0);
-            }}
-            startIcon={
-              <SvgIcon fontSize="small">
-                <TipsAndUpdatesOutlinedIcon />
-              </SvgIcon>
-            }
-            variant="contained"
-          >
-            Show Latest
-          </Button>
-        </div> */}
       </Box>
     </Card>
-    // <Box
-    //   sx={{
-    //     display: "flex",
-    //     justifyContent: "space-between",
-    //     alignItems: "center",
-    //   }}
-    // >
-    //   <OutlinedInput
-    //     defaultValue=""
-    //     fullWidth
-    //     disabled
-    //     startAdornment={
-    //       <InputAdornment position="start">
-    //         <SvgIcon color="action" fontSize="small">
-    //           <ReferralCodeIcon />
-    //         </SvgIcon>
-    //       </InputAdornment>
-    //     }
-    //     sx={{ maxWidth: 500 }}
-    //   />
-
-    //   <div>
-    //     <Button
-    //       //   onClick={() => handleCompare(selectedFilter)}
-    //       //   disabled={selectedFilter === 0 ? true : false}
-    //       sx={{ marginRight: "10px" }}
-    //       startIcon={
-    //         <SvgIcon fontSize="small">
-    //           <AttachFileIcon />
-    //           {/* <CompareArrowsOutlinedIcon /> */}
-    //         </SvgIcon>
-    //       }
-    //       variant="contained"
-    //     >
-    //       Copy to clipboard
-    //     </Button>
-    //   </div>
-    // </Box>
   );
 };
 

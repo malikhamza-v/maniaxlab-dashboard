@@ -26,7 +26,7 @@ export const OverviewTotalCustomers = (props) => {
             <Typography color="text.secondary" variant="overline">
               Total Investment
             </Typography>
-            <Typography variant="h4">{value}</Typography>
+            <Typography variant="h5">{value}</Typography>
           </Stack>
           <Avatar
             sx={{

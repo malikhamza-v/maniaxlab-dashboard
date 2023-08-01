@@ -101,3 +101,13 @@ export const GetUserStats = async () => {
       return res.data;
     });
 };
+
+export const GetReferralProjects = async (data) => {
+  return await axios
+    .get("payments/get-referral-projects/", {
+      params: data,
+    })
+    .then((res) => {
+      return res.data;
+    });
+};

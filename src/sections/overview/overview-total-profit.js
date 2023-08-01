@@ -25,7 +25,7 @@ export const OverviewTotalProfit = (props) => {
             <Typography color="text.secondary" variant="overline">
               Referral Profit
             </Typography>
-            <Typography variant="h4">{value}</Typography>
+            <Typography variant="h5">{value}</Typography>
           </Stack>
           <Avatar
             sx={{

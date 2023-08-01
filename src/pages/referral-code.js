@@ -1,20 +1,25 @@
-import {
-  Box,
-  Button,
-  Container,
-  Stack,
-  SvgIcon,
-  Typography,
-} from "@mui/material";
+import { Box, Container, Stack, Typography } from "@mui/material";
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
 import SEO from "@/components/seo";
 import ReferralCode from "@/sections/referral/referral-code";
-import ArrowDownOnSquareIcon from "@heroicons/react/24/solid/ArrowDownOnSquareIcon";
-import ArrowUpOnSquareIcon from "@heroicons/react/24/solid/ArrowUpOnSquareIcon";
-import PlusIcon from "@heroicons/react/24/solid/PlusIcon";
-import { KeywordsSearch } from "@/sections/keywords/keywords-search";
+import { ReferralTable } from "@/sections/referral/referral-table";
+import { useContext, useEffect, useState } from "react";
+import { GetReferralProjects } from "@/utils/axios/axios";
+import { AuthContext } from "@/contexts/auth-context";
 
 const Page = () => {
+  const [referralProjects, setReferralProjects] = useState([]);
+  const { user } = useContext(AuthContext);
+  useEffect(() => {
+    const fetchReferralProjects = async () => {
+      const data = await GetReferralProjects({
+        id: user?.coupon?.id,
+      });
+      setReferralProjects(data);
+    };
+
+    fetchReferralProjects();
+  }, []);
   return (
     <>
       <SEO pageTitle="Keywords Ranking" />
@@ -33,6 +38,7 @@ const Page = () => {
               </Stack>
             </Stack>
             <ReferralCode />
+            <ReferralTable items={referralProjects} />
           </Stack>
         </Container>
       </Box>
