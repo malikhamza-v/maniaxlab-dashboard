@@ -3,6 +3,7 @@ import {
   Box,
   Card,
   Checkbox,
+  CircularProgress,
   IconButton,
   Table,
   TableBody,
@@ -76,6 +77,7 @@ export const KeywordsTable = (props) => {
     selected = [],
     potentialKeywords,
     comparekeywords,
+    isKeywordsLoading,
   } = props;
 
   const selectedSome = selected.length > 0 && selected.length < items.length;
@@ -167,12 +169,19 @@ export const KeywordsTable = (props) => {
                   })}
               </TableBody>
             </Table>
-            {items.length === 0 && (
+            {items.length === 0 && !isKeywordsLoading && (
               <div className="text-center py-3">
                 <span className="text-secondary">
-                  Our specialists are currently adding the keywords for you -
-                  Please check back later
+                  {!potentialKeywords
+                    ? "Unlock the full potential of your project! Start by adding priority keywords now"
+                    : "Our specialists are currently adding the keywords for you - Please check back later"}
                 </span>
+              </div>
+            )}
+
+            {isKeywordsLoading && (
+              <div className="text-center py-3">
+                <CircularProgress style={{ height: "30px", width: "30px" }} />{" "}
               </div>
             )}
           </TableContainer>
@@ -180,18 +189,4 @@ export const KeywordsTable = (props) => {
       </Scrollbar>
     </Card>
   );
-};
-
-KeywordsTable.propTypes = {
-  count: PropTypes.number,
-  items: PropTypes.array,
-  onDeselectAll: PropTypes.func,
-  onDeselectOne: PropTypes.func,
-  onPageChange: PropTypes.func,
-  onRowsPerPageChange: PropTypes.func,
-  onSelectAll: PropTypes.func,
-  onSelectOne: PropTypes.func,
-  page: PropTypes.number,
-  rowsPerPage: PropTypes.number,
-  selected: PropTypes.array,
 };

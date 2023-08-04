@@ -8,14 +8,14 @@ import {
   Box,
   Card,
   CardContent,
+  CircularProgress,
   Stack,
   SvgIcon,
   Typography,
 } from "@mui/material";
 
 export const OverviewCard = (props) => {
-  const { compareData, sx, value, title } = props;
-
+  const { compareData, sx, value, title, isAnalyticsLoading } = props;
   return (
     <Card sx={sx}>
       <CardContent>
@@ -29,36 +29,41 @@ export const OverviewCard = (props) => {
             <Typography color="text.secondary" variant="overline">
               {title}
             </Typography>
-            {!compareData ? (
-              <Typography variant="h4">{value}</Typography>
+            {isAnalyticsLoading ? (
+              <div>
+                <CircularProgress style={{ height: "30px", width: "30px" }} />{" "}
+              </div>
             ) : (
               <>
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                >
-                  <Typography variant="h5">{compareData}</Typography>
-                  <Typography variant="h5">
-                    <ArrowRightIcon />
-                  </Typography>
-                  <Typography variant="h5">{value}</Typography>
-                </Box>
+                {!compareData ? (
+                  <>
+                    {value ? (
+                      <Typography variant="h4">{value}</Typography>
+                    ) : (
+                      <Typography variant="caption" className="text-primary">
+                        Analyzing ...
+                      </Typography>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Typography variant="h5">{compareData}</Typography>
+                      <Typography variant="h5">
+                        <ArrowRightIcon />
+                      </Typography>
+                      <Typography variant="h5">{value}</Typography>
+                    </Box>
+                  </>
+                )}
               </>
             )}
           </Stack>
-          {/* <Avatar
-            sx={{
-              backgroundColor: "success.main",
-              height: 56,
-              width: 56,
-            }}
-          >
-            <SvgIcon>
-              <UsersIcon />
-            </SvgIcon>
-          </Avatar> */}
         </Stack>
       </CardContent>
     </Card>

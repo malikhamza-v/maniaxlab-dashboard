@@ -1,7 +1,6 @@
 import { useContext, useEffect, useMemo, useState } from "react";
 import ArrowDownOnSquareIcon from "@heroicons/react/24/solid/ArrowDownOnSquareIcon";
 import ArrowUpOnSquareIcon from "@heroicons/react/24/solid/ArrowUpOnSquareIcon";
-import PlusIcon from "@heroicons/react/24/solid/PlusIcon";
 import {
   Box,
   Button,
@@ -43,10 +42,12 @@ const Page = () => {
   const [potentialKeywords, setPotentialKeywords] = useState([]);
   const [groupedPotentialKeywords, setGroupedPotentialKeywords] = useState({});
   const [comparePotentialKeywords, setComparePotentialKeywords] = useState([]);
+  const [isKeywordsLoading, setIsKeywordsLoading] = useState(false);
 
   const [domainAnalytics, setDomainAnalytics] = useState([]);
   const [groupedDomainAnalytics, setGroupedDomainAnalytics] = useState([]);
   const [compareDomainAnalytics, setCompareDomainAnalytics] = useState([]);
+  const [isAnalyticsLoading, setIsAnalyticsLoading] = useState(false);
 
   const [projects, setProjects] = useState([]);
   const [selectedProject, setSelectedProject] = useState(0);
@@ -73,9 +74,11 @@ const Page = () => {
 
   useEffect(() => {
     const fetchProjectKeywords = async () => {
+      setIsKeywordsLoading(true);
       const data = await GetProjectKeywords({
-        project_id: 107,
+        project_id: selectedProject,
       });
+      setIsKeywordsLoading(false);
       if (!data) {
         return;
       }
@@ -113,9 +116,12 @@ const Page = () => {
     };
 
     const fetchDomainAnalytics = async () => {
+      setIsAnalyticsLoading(true);
       const data = await getDomainAnalytics({
-        project_id: 107,
+        project_id: selectedProject,
       });
+
+      setIsAnalyticsLoading(false);
 
       if (!data) {
         return;
@@ -135,21 +141,24 @@ const Page = () => {
 
     fetchProjectKeywords();
     fetchDomainAnalytics();
-  }, []);
+  }, [selectedProject]);
 
   useEffect(() => {
-    if (compareOption.length !== 0) {
-      const numArray = compareOption.map(Number);
-      const maxNum = Math.max(...numArray);
-      setKeywords(groupedKeywords[maxNum] ? groupedKeywords[maxNum] : []);
-      setPotentialKeywords(
-        groupedPotentialKeywords[maxNum] ? groupedPotentialKeywords[maxNum] : []
-      );
-      setDomainAnalytics(
-        groupedDomainAnalytics[maxNum] ? groupedDomainAnalytics[maxNum] : []
-      );
-    }
-  }, [compareOption]);
+    const numArray = compareOption.map(Number);
+    const maxNum = numArray.length === 0 ? 0 : Math.max(...numArray);
+    setKeywords(groupedKeywords[maxNum] ? groupedKeywords[maxNum] : []);
+    setPotentialKeywords(
+      groupedPotentialKeywords[maxNum] ? groupedPotentialKeywords[maxNum] : []
+    );
+    setDomainAnalytics(
+      groupedDomainAnalytics[maxNum] ? groupedDomainAnalytics[maxNum] : []
+    );
+  }, [
+    compareOption,
+    groupedDomainAnalytics,
+    groupedKeywords,
+    groupedPotentialKeywords,
+  ]);
 
   const keywordIds = useCustomerIds(keywords);
   const keywordsSelection = useSelection(keywordIds);
@@ -237,7 +246,23 @@ const Page = () => {
                         outline: "none",
                       },
                     }}
-                    onChange={(e) => setSelectedProject(e.target.value)}
+                    onChange={(e) => {
+                      setSelectedProject(e.target.value);
+                      setDomainAnalytics([]);
+                      setGroupedDomainAnalytics([]);
+                      setCompareDomainAnalytics([]);
+
+                      setKeywords([]);
+                      setGroupedKeywords([]);
+                      setComparekeywords([]);
+
+                      setPotentialKeywords([]);
+                      setGroupedPotentialKeywords([]);
+                      setComparePotentialKeywords([]);
+
+                      setCompareOption([]);
+                      handleShowLatest();
+                    }}
                   >
                     {projects.map((item, index) => {
                       if (item == 0) {
@@ -272,40 +297,40 @@ const Page = () => {
               }}
             >
               <Container maxWidth="xl">
-                {domainAnalytics.map((item, index) => {
-                  return (
-                    <Grid container spacing={3} key={index}>
-                      <Grid xs={12} sm={6} lg={3} padding={1} item={true}>
-                        <OverviewCard
-                          title="Domain Authority"
-                          value={item.da}
-                          compareData={compareDomainAnalytics[0]?.da}
-                        />
-                      </Grid>
-                      <Grid xs={12} sm={6} lg={3} padding={1} item={true}>
-                        <OverviewCard
-                          title="Page Authority"
-                          value={item.pa}
-                          compareData={compareDomainAnalytics[0]?.pa}
-                        />
-                      </Grid>
-                      <Grid xs={12} sm={6} lg={3} padding={1} item={true}>
-                        <OverviewCard
-                          title="Spam Score"
-                          value={item.ss}
-                          compareData={compareDomainAnalytics[0]?.ss}
-                        />
-                      </Grid>
-                      <Grid xs={12} sm={6} lg={3} padding={1} item={true}>
-                        <OverviewCard
-                          title="Backlinks Profile"
-                          value={item.bp}
-                          compareData={compareDomainAnalytics[0]?.bp}
-                        />
-                      </Grid>
-                    </Grid>
-                  );
-                })}
+                <Grid container spacing={3}>
+                  <Grid xs={12} sm={6} lg={3} padding={1} item={true}>
+                    <OverviewCard
+                      title="Domain Authority"
+                      value={domainAnalytics[0]?.da}
+                      compareData={compareDomainAnalytics[0]?.da}
+                      isAnalyticsLoading={isAnalyticsLoading}
+                    />
+                  </Grid>
+                  <Grid xs={12} sm={6} lg={3} padding={1} item={true}>
+                    <OverviewCard
+                      title="Page Authority"
+                      value={domainAnalytics[0]?.pa}
+                      compareData={compareDomainAnalytics[0]?.pa}
+                      isAnalyticsLoading={isAnalyticsLoading}
+                    />
+                  </Grid>
+                  <Grid xs={12} sm={6} lg={3} padding={1} item={true}>
+                    <OverviewCard
+                      title="Spam Score"
+                      value={domainAnalytics[0]?.ss}
+                      compareData={compareDomainAnalytics[0]?.ss}
+                      isAnalyticsLoading={isAnalyticsLoading}
+                    />
+                  </Grid>
+                  <Grid xs={12} sm={6} lg={3} padding={1} item={true}>
+                    <OverviewCard
+                      title="Backlinks Profile"
+                      value={domainAnalytics[0]?.bp}
+                      compareData={compareDomainAnalytics[0]?.bp}
+                      isAnalyticsLoading={isAnalyticsLoading}
+                    />
+                  </Grid>
+                </Grid>
               </Container>
             </Box>
 
@@ -318,6 +343,7 @@ const Page = () => {
               selected={keywordsSelection.selected}
               potentialKeywords
               comparekeywords={comparekeywords}
+              isKeywordsLoading={isKeywordsLoading}
             />
             <KeywordsTable
               items={potentialKeywords}
@@ -327,6 +353,7 @@ const Page = () => {
               onSelectOne={potentialKeywordsSelection.handleSelectOne}
               selected={potentialKeywordsSelection.selected}
               comparekeywords={comparePotentialKeywords}
+              isKeywordsLoading={isKeywordsLoading}
             />
           </Stack>
         </Container>
