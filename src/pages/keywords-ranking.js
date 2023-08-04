@@ -17,16 +17,12 @@ import { KeywordsTable } from "src/sections/keywords/keywords-table";
 import { KeywordsSearch } from "src/sections/keywords/keywords-search";
 import SEO from "@/components/seo";
 import { GetProjectKeywords } from "@/utils/axios/axios";
-import { OverviewTotalProfit } from "@/sections/overview/overview-total-profit";
-import { OverviewTasksProgress } from "@/sections/overview/overview-tasks-progress";
-import { OverviewTotalCustomers } from "@/sections/overview/overview-total-customers";
-import { OverviewBudget } from "@/sections/overview/overview-budget";
 import { OverviewCard } from "@/sections/overview/overview-card";
 
-const useCustomerIds = (customers) => {
+const useCustomerIds = (keywords) => {
   return useMemo(() => {
-    return customers?.map((customer) => customer.id);
-  }, [customers]);
+    return keywords === [] ? null : keywords?.map((keyword) => keyword.id);
+  }, [keywords]);
 };
 
 const Page = () => {
@@ -42,7 +38,7 @@ const Page = () => {
   useEffect(() => {
     const fetchProjectKeywords = async () => {
       const data = await GetProjectKeywords({
-        project_id: 76,
+        project_id: 107,
       });
       if (!data) {
         return;
@@ -84,10 +80,14 @@ const Page = () => {
   }, []);
 
   useEffect(() => {
-    const numArray = compareOption.map(Number);
-    const maxNum = Math.max(...numArray);
-    setKeywords(groupedKeywords[maxNum]);
-    setPotentialKeywords(groupedPotentialKeywords[maxNum]);
+    if (compareOption.length !== 0) {
+      const numArray = compareOption.map(Number);
+      const maxNum = Math.max(...numArray);
+      setKeywords(groupedKeywords[maxNum] ? groupedKeywords[maxNum] : []);
+      setPotentialKeywords(
+        groupedPotentialKeywords[maxNum] ? groupedPotentialKeywords[maxNum] : []
+      );
+    }
   }, [compareOption]);
 
   const keywordIds = useCustomerIds(keywords);
@@ -176,43 +176,17 @@ const Page = () => {
             >
               <Container maxWidth="xl">
                 <Grid container spacing={3}>
-                  <Grid xs={12} sm={6} lg={3} padding={1}>
-                    <OverviewCard
-                      positive
-                      title="Domain Authority (DA)"
-                      // sx={{ height: "100%" }}
-                      value="24K"
-                    />
-                    {/* <OverviewBudget
-                  difference={12}
-                  positive
-                  sx={{ height: "100%" }}
-                  value="$24k"
-                /> */}
+                  <Grid xs={12} sm={6} lg={3} padding={1} item={true}>
+                    <OverviewCard title="Domain Authority" value="24K" />
                   </Grid>
-                  <Grid xs={12} sm={6} lg={3} padding={1}>
-                    <OverviewCard title="Page Authority (PA)" value={30} />
-
-                    {/* <OverviewTotalCustomers
-                  difference={16}
-                  positive={false}
-                  sx={{ height: "100%" }}
-                  value="1.6k"
-                /> */}
+                  <Grid xs={12} sm={6} lg={3} padding={1} item={true}>
+                    <OverviewCard title="Page Authority" value={30} />
                   </Grid>
-                  <Grid xs={12} sm={6} lg={3} padding={1}>
-                    <OverviewCard title="Spam Score (SS)" value={50} />
-
-                    {/* <OverviewTasksProgress sx={{ height: "100%" }} value={75.5} /> */}
+                  <Grid xs={12} sm={6} lg={3} padding={1} item={true}>
+                    <OverviewCard title="Spam Score" value={50} />
                   </Grid>
-                  <Grid xs={12} sm={6} lg={3} padding={1}>
-                    <OverviewCard
-                      title="Backlinks Profile"
-                      value={50}
-                      // difference={13}
-                      // sx={{ height: "auto" }}
-                    />
-                    {/* <OverviewTotalProfit sx={{ height: "100%" }} value="$15k" /> */}
+                  <Grid xs={12} sm={6} lg={3} padding={1} item={true}>
+                    <OverviewCard title="Backlinks Profile" value={50} />
                   </Grid>
                 </Grid>
               </Container>

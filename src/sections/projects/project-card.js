@@ -117,7 +117,7 @@ export const ProjectCard = (props) => {
                 {data.sub_category}
               </Typography>
               <Typography align="center" variant="subtitle2">
-                {data.project_type}
+                {data.type}
               </Typography>
             </Box>
           </Box>
@@ -128,22 +128,14 @@ export const ProjectCard = (props) => {
               gap: "10px",
             }}
           >
-            <Chip
-              label={data.project_status}
-              variant="filled"
-              color="default"
-            />
-            <Chip
-              label={data.project_category}
-              variant="filled"
-              color="success"
-            />
+            <Chip label={data.status} variant="filled" color="default" />
+            <Chip label={data.category} variant="filled" color="success" />
           </Box>
         </Box>
         <Typography gutterBottom variant="h5">
-          {data.project_name}
+          {data.name}
         </Typography>
-        <Typography variant="body1">{data.project_desc}</Typography>
+        <Typography variant="body1">{data.description}</Typography>
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Box sx={{ width: "100%", mr: 3 }}>
             <ProgressBar
@@ -153,7 +145,7 @@ export const ProjectCard = (props) => {
           </Box>
           <Box sx={{ minWidth: 35 }}>
             <Typography variant="body2" color="text.secondary">
-              {`${getRemainingDays(data.created_at, data.project_length)}%`}
+              {`${getRemainingDays(data.created_at, data.length)}%`}
             </Typography>
           </Box>
         </Box>

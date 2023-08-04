@@ -80,7 +80,6 @@ export const KeywordsTable = (props) => {
 
   const selectedSome = selected.length > 0 && selected.length < items.length;
   const selectedAll = items.length > 0 && selected.length === items.length;
-
   return (
     <Card>
       <Scrollbar>
@@ -113,58 +112,68 @@ export const KeywordsTable = (props) => {
                   <TableCell align="center">Position</TableCell>
                 </TableRow>
               </TableHead>
+
               <TableBody>
-                {items.map((customer) => {
-                  const value = comparekeywords?.filter((item) => {
-                    return item.keyword === customer.keyword;
-                  });
+                {items.length !== 0 &&
+                  items.map((customer) => {
+                    const value = comparekeywords?.filter((item) => {
+                      return item.keyword === customer.keyword;
+                    });
 
-                  const isSelected = selected.includes(customer.id);
+                    const isSelected = selected.includes(customer.id);
 
-                  return (
-                    <TableRow hover key={customer.id} selected={isSelected}>
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          checked={isSelected}
-                          onChange={(event) => {
-                            if (event.target.checked) {
-                              onSelectOne?.(customer.id);
-                            } else {
-                              onDeselectOne?.(customer.id);
-                            }
-                          }}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <Typography variant="subtitle2" align="center">
-                          {customer.keyword}
-                        </Typography>
-                      </TableCell>
-                      <TableCell align="center">
-                        {value[0]?.position_google
-                          ? ` ${value[0]?.position_google} -> ${customer.position_google}`
-                          : customer.position_google}
-                      </TableCell>
-                      <TableCell align="center">
-                        {value[0]?.position_bing
-                          ? `${value[0]?.position_bing} -> ${customer.position_bing} `
-                          : customer.position_bing}
-                      </TableCell>
-                      <TableCell align="center">
-                        {value[0]?.keyword_difficulty
-                          ? `${value[0]?.keyword_difficulty} -> ${customer.keyword_difficulty}`
-                          : customer.keyword_difficulty}
-                      </TableCell>
-                      <TableCell align="center">
-                        {value[0]?.keyword_difficulty
-                          ? `${value[0]?.potential_traffic} -> ${customer.potential_traffic} `
-                          : customer.potential_traffic}
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
+                    return (
+                      <TableRow hover key={customer.id} selected={isSelected}>
+                        <TableCell padding="checkbox">
+                          <Checkbox
+                            checked={isSelected}
+                            onChange={(event) => {
+                              if (event.target.checked) {
+                                onSelectOne?.(customer.id);
+                              } else {
+                                onDeselectOne?.(customer.id);
+                              }
+                            }}
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <Typography variant="subtitle2" align="center">
+                            {customer.keyword}
+                          </Typography>
+                        </TableCell>
+                        <TableCell align="center">
+                          {value[0]?.position_google
+                            ? ` ${value[0]?.position_google} -> ${customer.position_google}`
+                            : customer.position_google}
+                        </TableCell>
+                        <TableCell align="center">
+                          {value[0]?.position_bing
+                            ? `${value[0]?.position_bing} -> ${customer.position_bing} `
+                            : customer.position_bing}
+                        </TableCell>
+                        <TableCell align="center">
+                          {value[0]?.keyword_difficulty
+                            ? `${value[0]?.keyword_difficulty} -> ${customer.keyword_difficulty}`
+                            : customer.keyword_difficulty}
+                        </TableCell>
+                        <TableCell align="center">
+                          {value[0]?.keyword_difficulty
+                            ? `${value[0]?.potential_traffic} -> ${customer.potential_traffic} `
+                            : customer.potential_traffic}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
               </TableBody>
             </Table>
+            {items.length === 0 && (
+              <div className="text-center py-3">
+                <span className="text-secondary">
+                  Our specialists are currently adding the keywords for you.
+                  Please check back later
+                </span>
+              </div>
+            )}
           </TableContainer>
         </Box>
       </Scrollbar>

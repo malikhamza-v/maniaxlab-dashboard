@@ -35,7 +35,7 @@ export const AccountProfile = () => {
             {user?.first_name} {user?.last_name}
           </Typography>
           <Typography color="text.secondary" variant="body2">
-            {user?.billing_info.city} {user?.billing_info.country}
+            {user?.city} {user?.country}
           </Typography>
         </Box>
       </CardContent>

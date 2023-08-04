@@ -43,8 +43,3 @@ export const OverviewTasksProgress = (props) => {
     </Card>
   );
 };
-
-OverviewTasksProgress.propTypes = {
-  value: PropTypes.number.isRequired,
-  sx: PropTypes.object,
-};

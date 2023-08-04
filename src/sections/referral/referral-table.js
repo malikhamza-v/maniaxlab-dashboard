@@ -40,9 +40,7 @@ export const ReferralTable = (props) => {
                           {referral.user_email}
                         </Typography>
                       </TableCell>
-                      <TableCell align="center">
-                        {referral.project_category}
-                      </TableCell>
+                      <TableCell align="center">{referral.category}</TableCell>
                       <TableCell align="center">
                         $ {referral.original_amount}
                       </TableCell>
