@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { AuthContext } from "@/contexts/auth-context";
 import { Country, State } from "country-state-city";
-import { UpdateUserInfo, loginWithToken } from "@/utils/axios/axios";
+import { UpdateUserInfo } from "@/utils/axios/axios";
 
 const states = [
   {
@@ -57,7 +57,7 @@ export const AccountProfileDetails = () => {
     const status = await UpdateUserInfo(values.id, {
       first_name: values.first_name,
       last_name: values.last_name,
-      phone_no: values.phone_no,
+      phone_no: values.phone_number,
     });
 
     if (status) {
@@ -119,7 +119,7 @@ export const AccountProfileDetails = () => {
                   name="phone_no"
                   onChange={handleChange}
                   type="number"
-                  value={values.phone_no}
+                  value={values.phone_number}
                 />
               </Grid>
               <Grid xs={12} md={6}>
@@ -131,7 +131,7 @@ export const AccountProfileDetails = () => {
                   disabled
                   select
                   SelectProps={{ native: true }}
-                  value={values.billing_info?.country}
+                  value={values.country}
                 >
                   {Country.getAllCountries().map((item, index) => {
                     return (
@@ -151,9 +151,9 @@ export const AccountProfileDetails = () => {
                   select
                   disabled
                   SelectProps={{ native: true }}
-                  value={values.billing_info?.state}
+                  value={values.state}
                 >
-                  {State.getStatesOfCountry(values.billing_info?.country)?.map(
+                  {State.getStatesOfCountry(values.country)?.map(
                     (item, index) => {
                       return (
                         <option key={index} value={item.isoCode}>
