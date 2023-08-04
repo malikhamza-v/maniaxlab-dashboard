@@ -45,19 +45,19 @@ const FilterIcon = () => (
   </svg>
 );
 
-export const ProjectFilter = () => {
-  const [selectedFilter, setSelectedFilter] = useState(1);
+export const ProjectFilter = ({
+  handleFilter,
+  handleClearFilter,
+  setSelectedFilter,
+  selectedFilter,
+  handleChange,
+}) => {
   const theme = useTheme();
   const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"));
 
-  const handleChange = (e) => {
-    const { value } = e.target;
-    setSelectedFilter(value);
-  };
-
-  const handleClearFilter = () => {
-    setSelectedFilter(1);
-  };
+  // const handleClearFilter = () => {
+  //   setSelectedFilter(1);
+  // };
 
   return (
     <Card
@@ -85,12 +85,12 @@ export const ProjectFilter = () => {
           }}
           onChange={handleChange}
         >
-          <MenuItem value={1} hidden>
+          <MenuItem value="All" hidden>
             All Projects
           </MenuItem>
-          <MenuItem value={2}>In Progress</MenuItem>
-          <MenuItem value={3}>Completed</MenuItem>
-          <MenuItem value={4}>On Hold</MenuItem>
+          <MenuItem value="In Progress">In Progress</MenuItem>
+          <MenuItem value="Completed">Completed</MenuItem>
+          <MenuItem value="On Hold">On Hold</MenuItem>
         </Select>
       </FormControl>
       <Box
@@ -101,6 +101,7 @@ export const ProjectFilter = () => {
         <div>
           <Button
             sx={{ marginRight: "10px" }}
+            onClick={handleFilter}
             startIcon={
               <SvgIcon fontSize="small">
                 <FilterIcon />

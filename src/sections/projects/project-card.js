@@ -28,6 +28,14 @@ import { report_data } from "@/utils/report-data";
 const getServiceLogo = (project_category) => {
   if (project_category === "Digital Marketing") {
     return "assets/services/digital-marketing.png";
+  } else if (project_category === "Others") {
+    return "assets/services/others.png";
+  } else if (project_category === "Designing") {
+    return "assets/services/designing.png";
+  } else if (project_category === "Web Development") {
+    return "assets/services/web-development.png";
+  } else if (project_category === "App Development") {
+    return "assets/services/app-development.svg";
   }
 };
 
@@ -41,7 +49,7 @@ const ReportCard = ({ data }) => {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          backgroundColor: "lightpink",
+          backgroundColor: "lightsteelblue",
         }}
       >
         <Typography variant="body2" sx={{ marginBlock: "auto" }}>
@@ -75,7 +83,7 @@ const ProjectReports = ({ expanded }) => {
 export const ProjectCard = (props) => {
   const { data } = props;
   const [expanded, setExpanded] = useState(false);
-  const logo = getServiceLogo(data.project_category);
+  const logo = getServiceLogo(data.category);
   const theme = useTheme();
 
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
@@ -113,10 +121,8 @@ export const ProjectCard = (props) => {
           <Box sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <Avatar src={logo} variant="square" />
             <Box>
-              <Typography align="center" variant="subtitle1">
-                {data.sub_category}
-              </Typography>
-              <Typography align="center" variant="subtitle2">
+              <Typography variant="subtitle1">{data.sub_category}</Typography>
+              <Typography variant="subtitle2" className="text-primary">
                 {data.type}
               </Typography>
             </Box>
@@ -135,12 +141,14 @@ export const ProjectCard = (props) => {
         <Typography gutterBottom variant="h5">
           {data.name}
         </Typography>
-        <Typography variant="body1">{data.description}</Typography>
+        <Typography variant="body1" className="py-1">
+          {data.description}
+        </Typography>
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Box sx={{ width: "100%", mr: 3 }}>
             <ProgressBar
               variant="determinate"
-              value={getRemainingDays(data.created_at, data.project_length)}
+              value={getRemainingDays(data.created_at, data.length)}
             />
           </Box>
           <Box sx={{ minWidth: 35 }}>

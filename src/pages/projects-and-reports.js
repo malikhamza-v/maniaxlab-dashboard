@@ -5,11 +5,12 @@ import {
   Typography,
   Unstable_Grid2 as Grid,
   CircularProgress,
+  Card,
+  CardContent,
 } from "@mui/material";
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
 import { ProjectCard } from "@/sections/projects/project-card";
 import SEO from "@/components/seo";
-import { client_projects_data } from "@/utils/client-project-data";
 import { ProjectFilter } from "@/sections/projects/project-filter";
 import { useContext, useEffect, useState } from "react";
 import { GetProjects } from "@/utils/axios/axios";
@@ -18,20 +19,45 @@ import { AuthContext } from "@/contexts/auth-context";
 const Page = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [projects, setProjects] = useState([]);
-  const { user } = useContext(AuthContext);
-  useEffect(() => {
-    setIsLoading(true);
+  const [filterProjects, setFilterProjects] = useState([]);
+  const [selectedFilter, setSelectedFilter] = useState("All");
 
+  const { user } = useContext(AuthContext);
+
+  useEffect(() => {
     const fetchClientProjects = async () => {
+      setIsLoading(true);
       const data = await GetProjects({
         client_id: user.id,
       });
-      setProjects(data);
       setIsLoading(false);
+      setProjects(data);
+      setFilterProjects(data);
     };
 
     fetchClientProjects();
   }, []);
+
+  const handleFilter = () => {
+    if (selectedFilter === "All") {
+      return;
+    }
+    const data = projects.filter((item) => {
+      return item.status === selectedFilter;
+    });
+
+    setFilterProjects(data);
+  };
+
+  const handleChange = (e) => {
+    const { value } = e.target;
+    setSelectedFilter(value);
+  };
+
+  const handleClearFilter = () => {
+    setFilterProjects(projects);
+    setSelectedFilter("All");
+  };
 
   return (
     <>
@@ -50,18 +76,42 @@ const Page = () => {
                 <Typography variant="h4">Projects & Reports</Typography>
               </Stack>
             </Stack>
-            <ProjectFilter />
+            <ProjectFilter
+              handleFilter={handleFilter}
+              handleClearFilter={handleClearFilter}
+              setSelectedFilter={setSelectedFilter}
+              handleChange={handleChange}
+              selectedFilter={selectedFilter}
+            />
             <Grid container spacing={3}>
               {isLoading ? (
                 <Box sx={{ display: "flex", mx: "auto" }}>
                   <CircularProgress />
                 </Box>
-              ) : (
-                projects.map((item, index) => (
+              ) : filterProjects.length !== 0 ? (
+                filterProjects.map((item, index) => (
                   <Grid xs={12} md={12} lg={12} key={index}>
                     <ProjectCard data={item} />
                   </Grid>
                 ))
+              ) : (
+                <Container
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <img
+                    src="assets/errors/no-project.png"
+                    className="img-fluid"
+                    height={120}
+                    width={120}
+                  />
+                  <Typography className="text-secondary text-center">
+                    No {selectedFilter} Projects at the moment
+                  </Typography>
+                </Container>
               )}
             </Grid>
           </Stack>
