@@ -2,8 +2,10 @@ import PropTypes from "prop-types";
 import ArrowDownIcon from "@heroicons/react/24/solid/ArrowDownIcon";
 import ArrowUpIcon from "@heroicons/react/24/solid/ArrowUpIcon";
 import UsersIcon from "@heroicons/react/24/solid/UsersIcon";
+import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import {
   Avatar,
+  Box,
   Card,
   CardContent,
   Stack,
@@ -12,7 +14,7 @@ import {
 } from "@mui/material";
 
 export const OverviewCard = (props) => {
-  const { difference, positive = false, sx, value, title } = props;
+  const { compareData, sx, value, title } = props;
 
   return (
     <Card sx={sx}>
@@ -27,7 +29,24 @@ export const OverviewCard = (props) => {
             <Typography color="text.secondary" variant="overline">
               {title}
             </Typography>
-            <Typography variant="h4">{value}</Typography>
+            {!compareData ? (
+              <Typography variant="h4">{value}</Typography>
+            ) : (
+              <>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography variant="h5">{compareData}</Typography>
+                  <Typography variant="h5">
+                    <ArrowRightIcon />
+                  </Typography>
+                  <Typography variant="h5">{value}</Typography>
+                </Box>
+              </>
+            )}
           </Stack>
           {/* <Avatar
             sx={{
@@ -41,24 +60,6 @@ export const OverviewCard = (props) => {
             </SvgIcon>
           </Avatar> */}
         </Stack>
-        {difference && (
-          <Stack alignItems="center" direction="row" spacing={2} sx={{ mt: 2 }}>
-            <Stack alignItems="center" direction="row" spacing={0.5}>
-              <SvgIcon color={positive ? "success" : "error"} fontSize="small">
-                {positive ? <ArrowUpIcon /> : <ArrowDownIcon />}
-              </SvgIcon>
-              <Typography
-                color={positive ? "success.main" : "error.main"}
-                variant="body2"
-              >
-                {difference}%
-              </Typography>
-            </Stack>
-            <Typography color="text.secondary" variant="caption">
-              Since last month
-            </Typography>
-          </Stack>
-        )}
       </CardContent>
     </Card>
   );

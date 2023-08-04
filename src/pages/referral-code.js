@@ -10,16 +10,20 @@ import { AuthContext } from "@/contexts/auth-context";
 const Page = () => {
   const [referralProjects, setReferralProjects] = useState([]);
   const { user } = useContext(AuthContext);
-  useEffect(() => {
-    const fetchReferralProjects = async () => {
-      const data = await GetReferralProjects({
-        id: user?.coupon?.id,
-      });
-      setReferralProjects(data);
-    };
 
-    fetchReferralProjects();
+  useEffect(() => {
+    if (user.coupon) {
+      const fetchReferralProjects = async () => {
+        const data = await GetReferralProjects({
+          id: user?.coupon?.id,
+        });
+        setReferralProjects(data);
+      };
+
+      fetchReferralProjects();
+    }
   }, []);
+
   return (
     <>
       <SEO pageTitle="Keywords Ranking" />

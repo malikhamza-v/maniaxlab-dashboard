@@ -80,6 +80,7 @@ export const KeywordsTable = (props) => {
 
   const selectedSome = selected.length > 0 && selected.length < items.length;
   const selectedAll = items.length > 0 && selected.length === items.length;
+
   return (
     <Card>
       <Scrollbar>
@@ -109,7 +110,7 @@ export const KeywordsTable = (props) => {
                   <TableCell align="center">Position (Google)</TableCell>
                   <TableCell align="center">Position (Bing)</TableCell>
                   <TableCell align="center">Keyword Difficulty</TableCell>
-                  <TableCell align="center">Position</TableCell>
+                  <TableCell align="center">Potential Traffic</TableCell>
                 </TableRow>
               </TableHead>
 
@@ -169,7 +170,7 @@ export const KeywordsTable = (props) => {
             {items.length === 0 && (
               <div className="text-center py-3">
                 <span className="text-secondary">
-                  Our specialists are currently adding the keywords for you.
+                  Our specialists are currently adding the keywords for you -
                   Please check back later
                 </span>
               </div>

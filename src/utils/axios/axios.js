@@ -111,3 +111,21 @@ export const GetReferralProjects = async (data) => {
       return res.data;
     });
 };
+
+export const getDomainAnalytics = async (data) => {
+  return await axios
+    .get("get-project-analytics/", {
+      params: data,
+    })
+    .then((res) => {
+      if (res.data.status === 200) {
+        return res.data.analytics;
+      } else {
+        enqueueSnackbar(res.data.message, {
+          variant: "error",
+          style: { borderRadius: 100 },
+        });
+        return false;
+      }
+    });
+};

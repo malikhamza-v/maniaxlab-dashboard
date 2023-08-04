@@ -55,6 +55,12 @@ export const ReferralTable = (props) => {
                 })}
               </TableBody>
             </Table>
+            <div className="text-center py-3">
+              <span className="text-secondary">
+                There are no referrals linked to your referral code at the
+                moment
+              </span>
+            </div>
           </TableContainer>
         </Box>
       </Scrollbar>
