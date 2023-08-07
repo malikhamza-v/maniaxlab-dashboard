@@ -11,6 +11,7 @@ import {
   Select,
   Stack,
   SvgIcon,
+  TextField,
   Typography,
   useMediaQuery,
   useTheme,
@@ -23,10 +24,13 @@ import SEO from "@/components/seo";
 import {
   GetProjectKeywords,
   GetProjects,
+  addPriorityKeyword,
   getDomainAnalytics,
 } from "@/utils/axios/axios";
 import { OverviewCard } from "@/sections/overview/overview-card";
 import { AuthContext } from "@/contexts/auth-context";
+import Snackbar from "@/components/snackbar";
+import { AppDataContext } from "@/contexts/app-data-context";
 
 const useCustomerIds = (keywords) => {
   return useMemo(() => {
@@ -49,7 +53,7 @@ const Page = () => {
   const [compareDomainAnalytics, setCompareDomainAnalytics] = useState([]);
   const [isAnalyticsLoading, setIsAnalyticsLoading] = useState(false);
 
-  const [projects, setProjects] = useState([]);
+  const [seoProjects, setSeoProjects] = useState([]);
   const [selectedProject, setSelectedProject] = useState(0);
   const [compareOption, setCompareOption] = useState([]);
   const [isCompare, setIsCompare] = useState(false);
@@ -57,20 +61,21 @@ const Page = () => {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
+  const { appDataState, appDataDispatch } = useContext(AppDataContext);
+
+  const { projects } = appDataState;
+
+  const [keyword, setKeyword] = useState("");
+
   useEffect(() => {
-    const fetchSEOProjects = async () => {
-      const data = await GetProjects({
-        client_id: user.id,
-      });
-      const projects = data.filter((item) => {
+    if (projects !== 0) {
+      const data = projects.filter((item) => {
         return item.sub_category === "SEO";
       });
-
-      setProjects(projects);
-      setSelectedProject(projects.length !== 0 ? projects[0].id : 0);
-    };
-    fetchSEOProjects();
-  }, []);
+      setSeoProjects(data);
+      setSelectedProject(data.length !== 0 ? data[0].id : 0);
+    }
+  }, [projects]);
 
   useEffect(() => {
     const fetchProjectKeywords = async () => {
@@ -138,15 +143,17 @@ const Page = () => {
 
       setGroupedDomainAnalytics(groupedAnalytics);
     };
-
-    fetchProjectKeywords();
-    fetchDomainAnalytics();
+    if (selectedProject !== 0) {
+      fetchProjectKeywords();
+      fetchDomainAnalytics();
+    }
   }, [selectedProject]);
 
   useEffect(() => {
     const numArray = compareOption.map(Number);
     const maxNum = numArray.length === 0 ? 0 : Math.max(...numArray);
     setKeywords(groupedKeywords[maxNum] ? groupedKeywords[maxNum] : []);
+
     setPotentialKeywords(
       groupedPotentialKeywords[maxNum] ? groupedPotentialKeywords[maxNum] : []
     );
@@ -182,6 +189,21 @@ const Page = () => {
     setComparekeywords(groupedKeywords[maxNum - value]);
     setComparePotentialKeywords(groupedPotentialKeywords[maxNum - value]);
     setCompareDomainAnalytics(groupedDomainAnalytics[maxNum - value]);
+  };
+
+  const handleAddPriorityKeyword = async () => {
+    const numArray = compareOption.map(Number);
+    const maxNum = Math.max(...numArray);
+    const data = await addPriorityKeyword({
+      keyword,
+      project: selectedProject,
+      after_what_days: maxNum,
+    });
+    setKeyword("");
+    if (data) {
+      Snackbar("Keyword Added Successfully!", "success");
+      setPotentialKeywords([...potentialKeywords, data]);
+    }
   };
 
   return (
@@ -233,7 +255,7 @@ const Page = () => {
                     id="demo-simple-select"
                     value={selectedProject}
                     disabled={
-                      projects.length === 0 || projects.length === 1
+                      seoProjects.length === 0 || seoProjects.length === 1
                         ? true
                         : false
                     }
@@ -264,7 +286,7 @@ const Page = () => {
                       handleShowLatest();
                     }}
                   >
-                    {projects.map((item, index) => {
+                    {seoProjects.map((item, index) => {
                       if (item == 0) {
                         return;
                       }
@@ -355,6 +377,30 @@ const Page = () => {
               comparekeywords={comparePotentialKeywords}
               isKeywordsLoading={isKeywordsLoading}
             />
+            <Box display="flex" justifyContent="flex-end" gap={3}>
+              <Grid xs={12} md={6}>
+                <TextField
+                  fullWidth
+                  label="Enter Keyword"
+                  name="priorit_keyword"
+                  disabled={seoProjects === 0 ? true : false}
+                  onChange={(e) => setKeyword(e.target.value)}
+                  required
+                  value={keyword}
+                />
+              </Grid>
+              <Button
+                disabled={seoProjects === 0 ? true : false}
+                onClick={() => {
+                  handleAddPriorityKeyword();
+                  //  handleShowLatest();
+                  //  setSelectedFilter(0);
+                }}
+                variant="contained"
+              >
+                Add Keyword
+              </Button>
+            </Box>
           </Stack>
         </Container>
       </Box>

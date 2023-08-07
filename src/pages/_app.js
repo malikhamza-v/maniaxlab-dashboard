@@ -10,6 +10,7 @@ import { createTheme } from "src/theme";
 import { createEmotionCache } from "src/utils/create-emotion-cache";
 import "simplebar-react/dist/simplebar.min.css";
 import { SnackbarProvider } from "notistack";
+import { AppDataProvider } from "@/contexts/app-data-context";
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -35,15 +36,17 @@ const App = (props) => {
           <AuthProvider>
             <ThemeProvider theme={theme}>
               <CssBaseline />
-              <AuthConsumer>
-                {(auth) =>
-                  auth.isLoading ? (
-                    <SplashScreen />
-                  ) : (
-                    getLayout(<Component {...pageProps} />)
-                  )
-                }
-              </AuthConsumer>
+              <AppDataProvider>
+                <AuthConsumer>
+                  {(auth) =>
+                    auth.isLoading ? (
+                      <SplashScreen />
+                    ) : (
+                      getLayout(<Component {...pageProps} />)
+                    )
+                  }
+                </AuthConsumer>
+              </AppDataProvider>
             </ThemeProvider>
           </AuthProvider>
         </SnackbarProvider>

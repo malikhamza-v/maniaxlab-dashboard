@@ -5,8 +5,6 @@ import {
   Typography,
   Unstable_Grid2 as Grid,
   CircularProgress,
-  Card,
-  CardContent,
 } from "@mui/material";
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
 import { ProjectCard } from "@/sections/projects/project-card";
@@ -15,28 +13,37 @@ import { ProjectFilter } from "@/sections/projects/project-filter";
 import { useContext, useEffect, useState } from "react";
 import { GetProjects } from "@/utils/axios/axios";
 import { AuthContext } from "@/contexts/auth-context";
+import { AppDataContext } from "@/contexts/app-data-context";
 
 const Page = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [projects, setProjects] = useState([]);
   const [filterProjects, setFilterProjects] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState("All");
 
   const { user } = useContext(AuthContext);
+  const { appDataState, appDataDispatch } = useContext(AppDataContext);
+  const { projects } = appDataState;
 
   useEffect(() => {
-    const fetchClientProjects = async () => {
-      setIsLoading(true);
-      const data = await GetProjects({
-        client_id: user.id,
-      });
-      setIsLoading(false);
-      setProjects(data);
-      setFilterProjects(data);
-    };
+    if (projects.length === 0) {
+      const fetchClientProjects = async () => {
+        setIsLoading(true);
+        const data = await GetProjects({
+          client_id: user.id,
+        });
+        setIsLoading(false);
+        appDataDispatch({ type: "SET_PROJECTS", payload: data });
+      };
 
-    fetchClientProjects();
+      fetchClientProjects();
+    }
   }, []);
+
+  useEffect(() => {
+    if (projects.length !== 0) {
+      setFilterProjects(projects);
+    }
+  }, [projects]);
 
   const handleFilter = () => {
     if (selectedFilter === "All") {

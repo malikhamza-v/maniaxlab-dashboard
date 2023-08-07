@@ -121,10 +121,10 @@ export const SideNav = (props) => {
           }}
         >
           <Typography color="neutral.100" variant="subtitle2">
-            Need more features?
+            Need other services?
           </Typography>
           <Typography color="neutral.500" variant="body2">
-            Check out our Pro solution template.
+            Discover our exceptional services!
           </Typography>
           <Box
             sx={{
@@ -147,12 +147,12 @@ export const SideNav = (props) => {
               </SvgIcon>
             }
             fullWidth
-            href="https://material-kit-pro-react.devias.io/"
+            href="https://maniaxlab.agency/services/"
             sx={{ mt: 2 }}
             target="_blank"
             variant="contained"
           >
-            Pro Live Preview
+            Check Services
           </Button>
         </Box>
       </Box>

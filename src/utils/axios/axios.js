@@ -117,3 +117,19 @@ export const getDomainAnalytics = async (data) => {
       }
     });
 };
+
+export const addPriorityKeyword = async (data) => {
+  return await axios
+    .post("add-priority-keyword/", data)
+    .then((res) => {
+      if (res.data.id) {
+        return res.data;
+      } else {
+        Snackbar("Keyword Already Exists!", "info");
+      }
+    })
+    .catch(() => {
+      Snackbar("Server Error!", "error");
+      return false;
+    });
+};

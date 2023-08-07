@@ -80,7 +80,7 @@ export const AuthProvider = (props) => {
     try {
       isAuthenticated = localStorage.getItem("token") ? true : false;
     } catch (err) {
-      console.error(err);
+      return false;
     }
 
     if (isAuthenticated) {

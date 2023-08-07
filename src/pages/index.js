@@ -15,8 +15,8 @@ import {
 import { AccountProfile } from "src/sections/account/account-profile";
 import { AccountProfileDetails } from "src/sections/account/account-profile-details";
 import { SettingsPassword } from "@/sections/settings/settings-password";
-import { useEffect, useState } from "react";
-import { GetUserStats } from "@/utils/axios/axios";
+import { useContext, useEffect, useState } from "react";
+import { AppDataContext } from "@/contexts/app-data-context";
 
 const UserProfile = () => (
   <>
@@ -53,15 +53,9 @@ const UserProfile = () => (
 );
 
 const HomePage = () => {
-  const [userStats, setUserStats] = useState({});
+  const { appDataState } = useContext(AppDataContext);
 
-  useEffect(() => {
-    const fetchUserStats = async () => {
-      const data = await GetUserStats();
-      setUserStats(data);
-    };
-    fetchUserStats();
-  }, []);
+  const { userStats } = appDataState;
 
   return (
     <>
@@ -79,26 +73,26 @@ const HomePage = () => {
               <OverviewBudget
                 positive
                 sx={{ height: "100%" }}
-                value={userStats.total_projects}
+                value={userStats?.total_projects}
               />
             </Grid>
             <Grid xs={12} sm={6} lg={3}>
               <OverviewTotalCustomers
                 positive={false}
                 sx={{ height: "100%" }}
-                value={`$ ${userStats.total_spent}`}
+                value={`$ ${userStats?.total_spent}`}
               />
             </Grid>
             <Grid xs={12} sm={6} lg={3}>
               <OverviewTasksProgress
                 sx={{ height: "100%" }}
-                value={userStats.projects_in_progress}
+                value={userStats?.projects_in_progress}
               />
             </Grid>
             <Grid xs={12} sm={6} lg={3}>
               <OverviewTotalProfit
                 sx={{ height: "100%" }}
-                value={`$ ${userStats.referral_profit}`}
+                value={`$ ${userStats?.referral_profit}`}
               />
             </Grid>
             <UserProfile />
