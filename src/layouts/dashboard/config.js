@@ -1,11 +1,7 @@
 import ChartBarIcon from "@heroicons/react/24/solid/ChartBarIcon";
 import CogIcon from "@heroicons/react/24/solid/CogIcon";
-import LockClosedIcon from "@heroicons/react/24/solid/LockClosedIcon";
-import ShoppingBagIcon from "@heroicons/react/24/solid/ShoppingBagIcon";
-import UserIcon from "@heroicons/react/24/solid/UserIcon";
-import UserPlusIcon from "@heroicons/react/24/solid/UserPlusIcon";
-import UsersIcon from "@heroicons/react/24/solid/UsersIcon";
-import XCircleIcon from "@heroicons/react/24/solid/XCircleIcon";
+import ChatBubble from "@heroicons/react/24/solid/ChatBubbleBottomCenterIcon";
+import Bolt from "@heroicons/react/24/solid/BoltIcon";
 import { SvgIcon } from "@mui/material";
 
 export const items = [
@@ -23,7 +19,7 @@ export const items = [
     path: "/keywords-ranking",
     icon: (
       <SvgIcon fontSize="small">
-        <UsersIcon />
+        <Bolt />
       </SvgIcon>
     ),
   },
@@ -32,7 +28,7 @@ export const items = [
     path: "/projects-and-reports",
     icon: (
       <SvgIcon fontSize="small">
-        <ShoppingBagIcon />
+        <CogIcon />
       </SvgIcon>
     ),
   },
@@ -41,7 +37,7 @@ export const items = [
     path: "/referral-code",
     icon: (
       <SvgIcon fontSize="small">
-        <ShoppingBagIcon />
+        <ChatBubble />
       </SvgIcon>
     ),
   },

@@ -1,5 +1,5 @@
+import Snackbar from "@/components/snackbar";
 import axios from "axios";
-import { enqueueSnackbar } from "notistack";
 axios.defaults.baseURL = "http://localhost:8000/api/";
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
@@ -12,10 +12,7 @@ export const GetProjectKeywords = async (data) => {
       if (res.data.status === 200) {
         return res.data.data;
       } else {
-        enqueueSnackbar(res.data.error_message, {
-          variant: "error",
-          style: { borderRadius: 100 },
-        });
+        Snackbar(res.data.error_message, "error");
         return false;
       }
     });
@@ -29,7 +26,7 @@ export const loginUser = async (data) => {
       return res.data.user;
     })
     .catch((error) => {
-      return false;
+      Snackbar("Invalid Credentials!", "error");
     });
 };
 
@@ -61,16 +58,10 @@ export const GenerateReferralCode = async (data) => {
     .post("payments/generate-referral-code/", data)
     .then((res) => {
       if (res.data.status === 400) {
-        enqueueSnackbar(res.data.message, {
-          variant: "info",
-          style: { borderRadius: 100 },
-        });
+        Snackbar(res.data.message, "info");
         return false;
       } else if (res.data.status === 201) {
-        enqueueSnackbar(res.data.message, {
-          variant: "success",
-          style: { borderRadius: 100 },
-        });
+        Snackbar(res.data.message, "success");
         return true;
       }
       return true;
@@ -121,10 +112,7 @@ export const getDomainAnalytics = async (data) => {
       if (res.data.status === 200) {
         return res.data.analytics;
       } else {
-        enqueueSnackbar(res.data.message, {
-          variant: "error",
-          style: { borderRadius: 100 },
-        });
+        Snackbar(res.data.message, "error");
         return false;
       }
     });
