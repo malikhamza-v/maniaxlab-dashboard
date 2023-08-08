@@ -1,4 +1,3 @@
-import Head from "next/head";
 import { CacheProvider } from "@emotion/react";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
@@ -11,6 +10,7 @@ import { createEmotionCache } from "src/utils/create-emotion-cache";
 import "simplebar-react/dist/simplebar.min.css";
 import { SnackbarProvider } from "notistack";
 import { AppDataProvider } from "@/contexts/app-data-context";
+import SEO from "@/components/seo";
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -27,10 +27,7 @@ const App = (props) => {
 
   return (
     <CacheProvider value={emotionCache}>
-      <Head>
-        <title>Devias Kit</title>
-        <meta name="viewport" content="initial-scale=1, width=device-width" />
-      </Head>
+      <SEO pageTitle="Maniax Lab Dashboard" />
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <SnackbarProvider>
           <AuthProvider>
