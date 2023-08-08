@@ -23,12 +23,10 @@ import { KeywordsSearch } from "src/sections/keywords/keywords-search";
 import SEO from "@/components/seo";
 import {
   GetProjectKeywords,
-  GetProjects,
   addPriorityKeyword,
   getDomainAnalytics,
 } from "@/utils/axios/axios";
 import { OverviewCard } from "@/sections/overview/overview-card";
-import { AuthContext } from "@/contexts/auth-context";
 import Snackbar from "@/components/snackbar";
 import { AppDataContext } from "@/contexts/app-data-context";
 
@@ -56,12 +54,10 @@ const Page = () => {
   const [seoProjects, setSeoProjects] = useState([]);
   const [selectedProject, setSelectedProject] = useState(0);
   const [compareOption, setCompareOption] = useState([]);
-  const [isCompare, setIsCompare] = useState(false);
-  const { user } = useContext(AuthContext);
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const { appDataState, appDataDispatch } = useContext(AppDataContext);
+  const { appDataState } = useContext(AppDataContext);
 
   const { projects } = appDataState;
 
@@ -83,6 +79,7 @@ const Page = () => {
       const data = await GetProjectKeywords({
         project_id: selectedProject,
       });
+
       setIsKeywordsLoading(false);
       if (!data) {
         return;
@@ -185,7 +182,6 @@ const Page = () => {
   const handleCompare = (value) => {
     const numArray = compareOption.map(Number);
     const maxNum = Math.max(...numArray);
-    setIsCompare(true);
     setComparekeywords(groupedKeywords[maxNum - value]);
     setComparePotentialKeywords(groupedPotentialKeywords[maxNum - value]);
     setCompareDomainAnalytics(groupedDomainAnalytics[maxNum - value]);
@@ -193,7 +189,7 @@ const Page = () => {
 
   const handleAddPriorityKeyword = async () => {
     const numArray = compareOption.map(Number);
-    const maxNum = Math.max(...numArray);
+    const maxNum = numArray.length !== 0 ? Math.max(...numArray) : 0;
     const data = await addPriorityKeyword({
       keyword,
       project: selectedProject,
@@ -383,18 +379,16 @@ const Page = () => {
                   fullWidth
                   label="Enter Keyword"
                   name="priorit_keyword"
-                  disabled={seoProjects === 0 ? true : false}
+                  disabled={seoProjects.length === 0 ? true : false}
                   onChange={(e) => setKeyword(e.target.value)}
                   required
                   value={keyword}
                 />
               </Grid>
               <Button
-                disabled={seoProjects === 0 ? true : false}
+                disabled={seoProjects.length === 0 ? true : false}
                 onClick={() => {
                   handleAddPriorityKeyword();
-                  //  handleShowLatest();
-                  //  setSelectedFilter(0);
                 }}
                 variant="contained"
               >
