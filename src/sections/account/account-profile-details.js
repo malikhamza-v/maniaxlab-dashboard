@@ -39,7 +39,7 @@ export const AccountProfileDetails = () => {
   const [values, setValues] = useState(user);
 
   useEffect(() => {
-    if (user.id !== null) {
+    if (user?.id !== null) {
       setValues(user);
     }
   }, [user]);

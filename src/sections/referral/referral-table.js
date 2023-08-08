@@ -32,9 +32,9 @@ export const ReferralTable = (props) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {items.map((referral) => {
+                {items.map((referral, index) => {
                   return (
-                    <TableRow hover key={referral.id}>
+                    <TableRow hover key={index}>
                       <TableCell>
                         <Typography variant="subtitle2" align="center">
                           {referral.user_email}
