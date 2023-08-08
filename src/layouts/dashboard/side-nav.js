@@ -16,11 +16,13 @@ import {
 import { Scrollbar } from "src/components/scrollbar";
 import { items } from "./config";
 import { SideNavItem } from "./side-nav-item";
+import { AuthContext } from "@/contexts/auth-context";
 
 export const SideNav = (props) => {
   const { open, onClose } = props;
   const pathname = usePathname();
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
+  const { user } = useContext(AuthContext);
 
   const content = (
     <Scrollbar
@@ -73,7 +75,7 @@ export const SideNav = (props) => {
                 Dashboard
               </Typography>
               <Typography color="neutral.400" variant="body2">
-                Malik Hamza
+                {user?.first_name} {user?.last_name}
               </Typography>
             </div>
           </Box>

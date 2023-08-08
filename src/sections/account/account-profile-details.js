@@ -55,9 +55,9 @@ export const AccountProfileDetails = () => {
     event.preventDefault();
 
     const status = await UpdateUserInfo(values.id, {
-      first_name: values.first_name,
-      last_name: values.last_name,
-      phone_no: values.phone_number,
+      first_name: values?.first_name,
+      last_name: values?.last_name,
+      phone_no: values?.phone_number,
     });
 
     if (status) {
@@ -89,7 +89,7 @@ export const AccountProfileDetails = () => {
                   name="first_name"
                   onChange={handleChange}
                   required
-                  value={values.first_name}
+                  value={values?.first_name}
                 />
               </Grid>
               <Grid xs={12} md={6}>
