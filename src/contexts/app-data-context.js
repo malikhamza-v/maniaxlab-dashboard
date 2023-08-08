@@ -72,7 +72,6 @@ export const AppDataProvider = (props) => {
     });
 
     appDataDispatch({ type: "SET_PROJECTS", payload: data });
-
     const userstats = await GetUserStats();
 
     appDataDispatch({ type: "SET_USER_STATS", payload: userstats });

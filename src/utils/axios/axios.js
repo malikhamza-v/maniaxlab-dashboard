@@ -78,7 +78,8 @@ export const GetProjects = async (data) => {
     })
     .then((res) => {
       return res.data;
-    });
+    })
+    .catch(() => console.log("server_is_offline"));
 };
 
 export const GetUserStats = async () => {
@@ -132,4 +133,20 @@ export const addPriorityKeyword = async (data) => {
       Snackbar("Server Error!", "error");
       return false;
     });
+};
+
+export const GetProjectReports = async (data) => {
+  return await axios
+    .get("get-project-reports/", {
+      params: data,
+    })
+    .then((res) => {
+      if (res.data.status === 500) {
+        Snackbar(res.data.error_message, "error");
+        return false;
+      } else {
+        return res.data.reports;
+      }
+    })
+    .catch(() => console.log("server_is_offline"));
 };

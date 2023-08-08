@@ -9,6 +9,7 @@ import {
   Card,
   CardContent,
   Chip,
+  CircularProgress,
   Collapse,
   Divider,
   LinearProgress,
@@ -21,9 +22,11 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getDaysFromStart, getRemainingDays } from "@/utils";
-import { report_data } from "@/utils/report-data";
+import { GetProjectReports } from "@/utils/axios/axios";
+
+const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const getServiceLogo = (project_category) => {
   if (project_category === "Digital Marketing") {
@@ -53,17 +56,41 @@ const ReportCard = ({ data }) => {
         }}
       >
         <Typography variant="body2" sx={{ marginBlock: "auto" }}>
-          {data.title}
+          After {data.after_what_days} Days Report
         </Typography>
-        <SvgIcon color="action" fontSize="small" sx={{ cursor: "pointer" }}>
-          <DownloadReport />
-        </SvgIcon>
+        <a
+          key={data.id}
+          href={`${baseURL}${data.report}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <SvgIcon color="action" fontSize="small" sx={{ cursor: "pointer" }}>
+            <DownloadReport />
+          </SvgIcon>
+        </a>
       </Card>
     </Box>
   );
 };
 
-const ProjectReports = ({ expanded }) => {
+const ProjectReports = ({ expanded, id }) => {
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    if (expanded) {
+      setLoading(true);
+      const fetchReports = async () => {
+        const data = await GetProjectReports({
+          project_id: id,
+        });
+        setProjects(data);
+        setLoading(false);
+      };
+
+      fetchReports();
+    }
+  }, [expanded]);
+
   return (
     <Collapse
       in={expanded}
@@ -72,9 +99,17 @@ const ProjectReports = ({ expanded }) => {
       sx={{ borderTop: 1, borderColor: "grey.200" }}
     >
       <CardContent>
-        {report_data.map((data, index) => {
-          return <ReportCard data={data} />;
-        })}
+        {loading ? (
+          <Box sx={{ display: "flex", mx: "auto", width: 100 }}>
+            <CircularProgress />
+          </Box>
+        ) : (
+          <>
+            {projects.map((data, index) => {
+              return <ReportCard data={data} />;
+            })}
+          </>
+        )}
       </CardContent>
     </Collapse>
   );
@@ -148,7 +183,7 @@ export const ProjectCard = (props) => {
           <Box sx={{ width: "100%", mr: 3 }}>
             <ProgressBar
               variant="determinate"
-              value={getRemainingDays(data.created_at, data.length)}
+              value={parseInt(getRemainingDays(data.created_at, data.length))}
             />
           </Box>
           <Box sx={{ minWidth: 35 }}>
@@ -186,7 +221,7 @@ export const ProjectCard = (props) => {
           </Button>
         </Stack>
       </Stack>
-      <ProjectReports expanded={expanded} />
+      {expanded && <ProjectReports expanded={expanded} id={data?.id} />}
     </Card>
   );
 };
