@@ -17,6 +17,7 @@ import { Scrollbar } from "src/components/scrollbar";
 import { items } from "./config";
 import { SideNavItem } from "./side-nav-item";
 import { AuthContext } from "@/contexts/auth-context";
+import { useContext } from "react";
 
 export const SideNav = (props) => {
   const { open, onClose } = props;
